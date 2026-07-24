@@ -3607,7 +3607,7 @@
           [cdNotification, wtfisNotification].forEach((element) => {
             const timer = element && notificationTimers.get(element);
             if (timer) window.clearTimeout(timer);
-            element?.classList.remove("is-visible", "is-warning", "is-error");
+            element?.classList.remove("is-visible", "is-warning", "is-error", "is-success");
             if (element) notificationTimers.delete(element);
           });
         }
