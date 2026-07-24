@@ -3524,8 +3524,7 @@
         }
 
         function terminalPrompt(path, command) {
-          const location = path === projectRoot ? "~" : displayPath(path);
-          return `@term ${location} % ${command}`;
+          return `% ${command}`;
         }
 
         function updateTerminalState() {
@@ -3563,44 +3562,6 @@
              element.classList.remove("is-visible", "is-warning", "is-error", "is-success");
             notificationTimers.delete(element);
           }, 2000));
-         }
-
-         function showTerminalPreview() {
-           if (!generatedProject) return;
-
-           const previewNotification = (element, kickerElement, titleElement, copyElement, kicker, title, copy, state) => {
-             if (kickerElement) kickerElement.textContent = kicker;
-             if (titleElement) titleElement.textContent = title;
-             if (copyElement) copyElement.textContent = copy;
-             element?.classList.add("is-visible");
-             element?.classList.toggle("is-error", state === "error");
-             element?.classList.toggle("is-success", state === "success");
-           };
-
-           appendHistory(cdHistory, "history-command", "@term ~ % cd ~/Projects/AtomicHarbor");
-           appendHistory(cdHistory, "history-error", "cd: no such file or directory: ~/Projects/AtomicHarbor");
-           appendHistory(wtfisHistory, "history-command", "@term ~ % wtfis AtomicHarbor");
-           appendHistory(wtfisHistory, "history-success", `found ${generatedProject.path}`);
-           previewNotification(
-             cdNotification,
-             cdNotificationKicker,
-             cdNotificationTitle,
-             cdNotificationCopy,
-             "PATH ERROR",
-             "No such directory",
-             "+05m 00s / 2 wrong turns",
-             "error",
-           );
-           previewNotification(
-             wtfisNotification,
-             wtfisNotificationKicker,
-             wtfisNotificationTitle,
-             wtfisNotificationCopy,
-             "CONGRATS",
-             generatedProject.name,
-             "04m 42s saved / 1 command / ★★★★★",
-             "success",
-           );
          }
 
         function clearTerminalNotifications() {
@@ -4916,7 +4877,6 @@
         }
 
         generateFilesystem({ silent: true });
-        showTerminalPreview();
         loadScreenshotSlots();
         setupFooterWebGL();
         startInputDemo(cdInput, () => generatedProject?.path ?? `${projectRoot}/YourProject`);
