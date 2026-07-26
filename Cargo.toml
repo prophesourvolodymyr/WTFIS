@@ -4,7 +4,7 @@ default-run = "wtfis"
 version = "0.1.0"
 edition = "2024"
 description = "Find projects fast from your terminal"
-license = "MIT"
+license = "WTFPL"
 
 [dependencies]
 crossterm = "0.29"

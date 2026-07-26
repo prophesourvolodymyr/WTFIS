@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1f42f3" />
+    <title>WTFIS / Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@800;900&display=swap" rel="stylesheet" />
+    <style is:global>
+      :root {
+        --blue: #1f42f3;
+        --deep-blue: #0b28b6;
+        --ink: #102785;
+        --acid: #d4ff45;
+        --paper: #fbfbf7;
+        --line: rgba(16, 39, 133, 0.16);
+        --muted: rgba(16, 39, 133, 0.62);
+        --edge: clamp(1rem, 3vw, 3.5rem);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-width: 320px;
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "IBM Plex Mono", monospace;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      code,
+      pre {
+        font-family: "IBM Plex Mono", monospace;
+      }
+
+      .docs-grid {
+        position: fixed;
+        z-index: -1;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(to right, rgba(31, 66, 243, 0.055) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(31, 66, 243, 0.055) 1px, transparent 1px);
+        background-size: 5rem 5rem;
+        mask-image: linear-gradient(to bottom, #000 0, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
+      }
+
+      .docs-nav {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        min-height: 4.25rem;
+        padding: 0.75rem var(--edge);
+        border-bottom: 1px solid rgba(251, 251, 247, 0.2);
+        background: rgba(11, 40, 182, 0.96);
+        color: var(--paper);
+        backdrop-filter: blur(16px);
+      }
+
+      .docs-brand,
+      .docs-nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 2.55rem;
+        border: 1px solid rgba(251, 251, 247, 0.42);
+        border-radius: 999px;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+        transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+      }
+
+      .docs-brand {
+        border-color: var(--acid);
+        background: var(--acid);
+        color: var(--deep-blue);
+        font-weight: 600;
+      }
+
+      .docs-nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 0.45rem;
+      }
+
+      .docs-nav a:hover,
+      .docs-nav a:focus-visible {
+        border-color: var(--acid);
+        background: var(--acid);
+        color: var(--deep-blue);
+        outline: none;
+      }
+
+      .docs-layout {
+        display: grid;
+        grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
+        gap: clamp(2rem, 6vw, 7rem);
+        width: min(calc(100% - (var(--edge) * 2)), 112rem);
+        margin: 0 auto;
+        padding: clamp(3rem, 7vw, 7rem) 0 5rem;
+      }
+
+      .docs-sidebar {
+        position: sticky;
+        top: 6.25rem;
+        align-self: start;
+      }
+
+      .sidebar-label {
+        margin: 0 0 0.8rem;
+        color: var(--blue);
+        font-size: 0.58rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .sidebar-links {
+        display: grid;
+        gap: 0.12rem;
+        border-left: 1px solid var(--line);
+      }
+
+      .sidebar-links a {
+        border-left: 2px solid transparent;
+        padding: 0.48rem 0.75rem;
+        color: var(--muted);
+        font-size: 0.64rem;
+        text-decoration: none;
+      }
+
+      .sidebar-links a:hover,
+      .sidebar-links a:focus-visible {
+        border-left-color: var(--acid);
+        background: rgba(212, 255, 69, 0.2);
+        color: var(--deep-blue);
+        outline: none;
+      }
+
+      .docs-main {
+        min-width: 0;
+      }
+
+      .docs-kicker {
+        margin: 0 0 1rem;
+        color: var(--blue);
+        font-size: 0.62rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .docs-title {
+        max-width: 8ch;
+        margin: 0;
+        color: var(--deep-blue);
+        font-family: "Inter", sans-serif;
+        font-size: clamp(4.5rem, 11vw, 11rem);
+        font-weight: 900;
+        letter-spacing: -0.1em;
+        line-height: 0.76;
+      }
+
+      .docs-lede {
+        max-width: 42rem;
+        margin: 2rem 0 0;
+        color: var(--muted);
+        font-size: clamp(0.78rem, 1.1vw, 1rem);
+        line-height: 1.7;
+      }
+
+      .terminal-preview {
+        position: relative;
+        display: grid;
+        gap: 0.42rem;
+        max-width: 60rem;
+        margin: clamp(2.5rem, 5vw, 5rem) 0 clamp(4rem, 8vw, 7rem);
+        overflow: hidden;
+        border: 2px solid var(--paper);
+        border-radius: 1.4rem 0.65rem 1.4rem 0.65rem;
+        padding: clamp(1.25rem, 3vw, 2.2rem);
+        background: #08155f;
+        box-shadow: 0.55rem 0.6rem 0 var(--acid);
+        color: var(--paper);
+      }
+
+      .terminal-preview::after {
+        position: absolute;
+        right: -2rem;
+        bottom: -5rem;
+        width: 15rem;
+        height: 15rem;
+        border-radius: 50%;
+        background: rgba(31, 66, 243, 0.5);
+        content: "";
+      }
+
+      .terminal-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.32rem;
+        margin-bottom: 1rem;
+        color: rgba(251, 251, 247, 0.54);
+        font-size: 0.58rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .terminal-dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--acid);
+      }
+
+      .terminal-dot:nth-child(2) { opacity: 0.65; }
+      .terminal-dot:nth-child(3) { opacity: 0.35; }
+
+      .terminal-preview pre {
+        position: relative;
+        z-index: 1;
+        margin: 0;
+        overflow-x: auto;
+        color: rgba(251, 251, 247, 0.78);
+        font-size: clamp(0.65rem, 1.1vw, 0.88rem);
+        line-height: 1.65;
+        white-space: pre;
+      }
+
+      .terminal-command {
+        color: var(--acid);
+      }
+
+      .docs-section {
+        max-width: 60rem;
+        margin: 0 0 clamp(4rem, 8vw, 7rem);
+        scroll-margin-top: 7rem;
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+        margin: 0 0 1.2rem;
+        color: var(--deep-blue);
+        font-family: "Inter", sans-serif;
+        font-size: clamp(2rem, 4vw, 4.4rem);
+        font-weight: 900;
+        letter-spacing: -0.075em;
+        line-height: 0.86;
+      }
+
+      .section-number {
+        color: var(--blue);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.62rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+      }
+
+      .section-copy {
+        max-width: 46rem;
+        color: var(--muted);
+        font-size: 0.75rem;
+        line-height: 1.75;
+      }
+
+      .install-block {
+        display: grid;
+        gap: 0.75rem;
+        margin-top: 1.6rem;
+      }
+
+      .code-block {
+        position: relative;
+        overflow: auto;
+        border: 1px solid rgba(251, 251, 247, 0.2);
+        border-radius: 0.9rem 0.35rem 0.9rem 0.35rem;
+        padding: 1rem 3.9rem 1rem 1rem;
+        background: #0b1d82;
+        color: var(--paper);
+        font-size: 0.67rem;
+        line-height: 1.65;
+        white-space: pre;
+      }
+
+      .copy-code {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.65rem;
+        border: 1px solid rgba(251, 251, 247, 0.4);
+        border-radius: 999px;
+        padding: 0.38rem 0.55rem;
+        background: transparent;
+        color: var(--paper);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.52rem;
+      }
+
+      .copy-code:hover,
+      .copy-code:focus-visible {
+        border-color: var(--acid);
+        background: var(--acid);
+        color: var(--deep-blue);
+        outline: none;
+      }
+
+      .command-table {
+        width: 100%;
+        margin-top: 1.6rem;
+        border-collapse: collapse;
+        font-size: 0.68rem;
+      }
+
+      .command-table th,
+      .command-table td {
+        border-bottom: 1px solid var(--line);
+        padding: 0.85rem 0.7rem;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .command-table th {
+        color: var(--blue);
+        font-size: 0.55rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .command-table td:first-child {
+        width: 34%;
+        color: var(--deep-blue);
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .command-table td:last-child {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.8rem;
+        margin-top: 1.6rem;
+      }
+
+      .info-card {
+        min-height: 100%;
+        border: 1px solid var(--line);
+        border-radius: 1rem 0.35rem 1rem 0.35rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.56);
+      }
+
+      .info-card h3 {
+        margin: 0 0 0.65rem;
+        color: var(--deep-blue);
+        font-family: "Inter", sans-serif;
+        font-size: 1rem;
+        letter-spacing: -0.045em;
+      }
+
+      .info-card p,
+      .info-card pre {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.65rem;
+        line-height: 1.65;
+        white-space: pre-wrap;
+      }
+
+      .docs-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        min-height: 8rem;
+        padding: 1rem var(--edge);
+        background: #1d2733;
+        color: rgba(251, 251, 247, 0.7);
+        font-size: 0.58rem;
+      }
+
+      .docs-footer strong {
+        color: var(--acid);
+        font-family: "Inter", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: -0.05em;
+      }
+
+      @media (max-width: 820px) {
+        .docs-layout {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+          padding-top: 2.5rem;
+        }
+
+        .docs-sidebar {
+          position: static;
+          overflow-x: auto;
+        }
+
+        .sidebar-label {
+          margin-bottom: 0.55rem;
+        }
+
+        .sidebar-links {
+          display: flex;
+          width: max-content;
+          border: 0;
+        }
+
+        .sidebar-links a {
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          padding: 0.5rem 0.7rem;
+        }
+
+        .sidebar-links a:hover,
+        .sidebar-links a:focus-visible {
+          border-color: var(--acid);
+        }
+      }
+
+      @media (max-width: 560px) {
+        .docs-nav {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .docs-nav-links {
+          justify-content: flex-start;
+        }
+
+        .docs-title {
+          font-size: clamp(4.1rem, 21vw, 7rem);
+        }
+
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .command-table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+
+        .command-table td:last-child {
+          white-space: normal;
+        }
+
+        .docs-footer {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="docs-grid" aria-hidden="true"></div>
+
+    <header class="docs-nav">
+      <a class="docs-brand" href="/">WTFIS / DOCS</a>
+      <nav class="docs-nav-links" aria-label="Documentation navigation">
+        <a href="/#pain-point">home</a>
+        <a href="https://github.com/prophesourvolodymyr/WTFIS-CLI" target="_blank" rel="noreferrer">github</a>
+        <a href="/#playground">try WTFIS</a>
+      </nav>
+    </header>
+
+    <div class="docs-layout">
+      <aside class="docs-sidebar" aria-label="Documentation sections">
+        <p class="sidebar-label">On this page</p>
+        <nav class="sidebar-links">
+          <a href="#overview">Overview</a>
+          <a href="#install">Install</a>
+          <a href="#usage">Usage</a>
+          <a href="#direct-commands">Direct commands</a>
+          <a href="#search">Search</a>
+          <a href="#slash-commands">Slash commands</a>
+          <a href="#controls">Controls</a>
+          <a href="#configuration">Configuration</a>
+          <a href="#shell-integration">Shell integration</a>
+        </nav>
+      </aside>
+
+      <main class="docs-main">
+        <section class="docs-section" id="overview">
+          <p class="docs-kicker">Local-first / inline project finder</p>
+          <h1 class="docs-title">WTFIS<br />HELP.</h1>
+          <p class="docs-lede">
+            Where the fuck is your project? WTFIS searches your local folders with fuzzy matching, opens the right project, and lets your shell enter it without the directory archaeology.
+          </p>
+
+          <div class="terminal-preview" aria-label="WTFIS help terminal preview">
+            <div class="terminal-bar">
+              <span class="terminal-dot"></span>
+              <span class="terminal-dot"></span>
+              <span class="terminal-dot"></span>
+              <span>wtfis / help</span>
+            </div>
+            <pre><span class="terminal-command">$ wtfis --help</span>
+Where the fuck is your project?
+A local-first, inline project finder for shells that should know where you work.
+
+USAGE
+  wtfis QUERY            Search immediately
+  cdd QUERY              Short alias for wtfis
+
+HELP CONTROLS
+  Up / Down, Page Up / Page Down, Home / End to scroll
+  q, Esc, or Enter to close</pre>
+          </div>
+        </section>
+
+        <section class="docs-section" id="install">
+          <h2 class="section-heading"><span class="section-number">01</span>Install</h2>
+          <p class="section-copy">Install the command through Homebrew, then source the wrapper once so the parent shell can change directories after a selection.</p>
+          <div class="install-block">
+            <div class="code-block"><button class="copy-code" type="button" data-copy="brew tap prophesourvolodymyr/wtfis\nbrew install wtfis">copy</button>brew tap prophesourvolodymyr/wtfis
+brew install wtfis</div>
+            <div class="code-block"><button class="copy-code" type="button" data-copy='cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc'>copy</button>cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc
+source ~/.zshrc</div>
+          </div>
+          <p class="section-copy">For Bash, source <code>wtfis.bash</code> instead. Without shell integration, WTFIS can print paths but cannot change the parent shell directory.</p>
+        </section>
+
+        <section class="docs-section" id="usage">
+          <h2 class="section-heading"><span class="section-number">02</span>Usage</h2>
+          <p class="section-copy">Run WTFIS with no query to open recent projects, or pass a project name, path, typo, or command preset directly.</p>
+          <div class="code-block"><button class="copy-code" type="button" data-copy="wtfis\nwtfis Mascotify\ncdd Mascotify\nwtfis Mascotify /opencode">copy</button>wtfis                         # open inline search
+wtfis Mascotify              # search immediately
+cdd Mascotify                # short alias
+wtfis Mascotify /opencode    # search, enter, and run a command</div>
+          <p class="section-copy">Launching <code>wtfis</code> with no query does not scan the filesystem. It opens immediately with up to five recently opened folders; scanning begins when you type the first search character.</p>
+        </section>
+
+        <section class="docs-section" id="direct-commands">
+          <h2 class="section-heading"><span class="section-number">03</span>Direct commands</h2>
+          <p class="section-copy">These commands act without opening the selector when the required shell or project state is available.</p>
+          <table class="command-table">
+            <thead>
+              <tr><th>Command</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>wtfis --set</code></td><td>Configure roots, depth, colors, and commands.</td></tr>
+              <tr><td><code>wtfis --up</code></td><td>Recover a failed <code>cd</code> with a global home search.</td></tr>
+              <tr><td><code>wtfis --prev</code></td><td>Return to the previous directory. Requires shell integration.</td></tr>
+              <tr><td><code>wtfis --root</code></td><td>Go to a project root detected from <code>.git</code> or manifest files.</td></tr>
+              <tr><td><code>wtfis --last</code></td><td>Return to the most recent project selected by WTFIS.</td></tr>
+              <tr><td><code>wtfis --where</code></td><td>Print the detected project root without changing directory.</td></tr>
+              <tr><td><code>wtfis --home</code></td><td>Go directly to your home directory.</td></tr>
+              <tr><td><code>wtfis --recent</code></td><td>Open recent projects in the selector.</td></tr>
+              <tr><td><code>wtfis --help</code></td><td>Show the inline command guide.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="docs-section" id="search">
+          <h2 class="section-heading"><span class="section-number">04</span>Search</h2>
+          <div class="info-grid">
+            <article class="info-card">
+              <h3>Fuzzy by default.</h3>
+              <p>Type a project name, path, or typo, then press Enter. Multiple words are required matches and can be typed in any order.</p>
+            </article>
+            <article class="info-card">
+              <h3>Safe matches.</h3>
+              <p>Unique confident matches open immediately. Ambiguous matches stay in the selector so you can choose safely.</p>
+            </article>
+            <article class="info-card">
+              <h3>Local only.</h3>
+              <p>Matching is local. Paths and project data never leave this machine. Semantic search is planned, but is not available yet.</p>
+            </article>
+            <article class="info-card">
+              <h3>Depth aware.</h3>
+              <p>Search depth includes every layer up to the configured maximum. Shallower matches rank first.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="docs-section" id="slash-commands">
+          <h2 class="section-heading"><span class="section-number">05</span>Slash commands</h2>
+          <p class="section-copy">Type <code>/</code> in the selector to browse configured command presets. Commands can enter a project and run immediately, or be attached to a project for later use.</p>
+          <table class="command-table">
+            <thead>
+              <tr><th>Input</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>/</code></td><td>Browse configured command presets.</td></tr>
+              <tr><td><code>/opencode</code></td><td>Enter the project and run <code>opencode</code>.</td></tr>
+              <tr><td><code>/add</code></td><td>Attach a preset or custom command to a project.</td></tr>
+              <tr><td><code>/exit</code></td><td>Leave command mode.</td></tr>
+              <tr><td><code>/anything</code></td><td>Run any command after entering the project.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="docs-section" id="controls">
+          <h2 class="section-heading"><span class="section-number">06</span>Controls</h2>
+          <table class="command-table">
+            <thead>
+              <tr><th>Control</th><th>Behavior</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>Up / Down</code></td><td>Move through projects or commands.</td></tr>
+              <tr><td><code>Enter</code></td><td>Open the selected project or run a command.</td></tr>
+              <tr><td><code>Esc</code></td><td>Cancel, clear, or leave the current overlay.</td></tr>
+              <tr><td><code>Mouse click</code></td><td>Select or open an item.</td></tr>
+              <tr><td><code>Mouse wheel</code></td><td>Ignored inside the inline UI.</td></tr>
+              <tr><td><code>Page Up / Page Down</code></td><td>Scroll the help guide.</td></tr>
+              <tr><td><code>Home / End</code></td><td>Jump to the beginning or end of the help guide.</td></tr>
+              <tr><td><code>q / Esc / Enter</code></td><td>Close the help guide.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="docs-section" id="configuration">
+          <h2 class="section-heading"><span class="section-number">07</span>Configuration</h2>
+          <p class="section-copy">Reopen the settings screen at any time with <code>wtfis --set</code>. Configure search roots, hidden folders, exact depth, accent, marker, coffee reminders, and command presets from the inline settings UI.</p>
+          <div class="code-block"><button class="copy-code" type="button" data-copy='roots = ["/Users/you/GSpace"]\nexact_depth = 3'>copy</button>roots = ["/Users/you/GSpace"]
+exact_depth = 3</div>
+          <p class="section-copy"><code>exact_depth</code> is a maximum directory depth. A value of <code>3</code> searches the root's first, second, and third layers.</p>
+        </section>
+
+        <section class="docs-section" id="shell-integration">
+          <h2 class="section-heading"><span class="section-number">08</span>Shell integration</h2>
+          <p class="section-copy">The wrapper captures the selected path and changes the parent shell directory after WTFIS exits. Homebrew installs the wrapper under <code>share/wtfis</code> and prints setup commands.</p>
+          <div class="info-grid">
+            <article class="info-card">
+              <h3>Zsh</h3>
+              <pre>cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc
+source ~/.zshrc</pre>
+            </article>
+            <article class="info-card">
+              <h3>Bash</h3>
+              <pre>cat "$(brew --prefix)/share/wtfis/wtfis.bash" &gt;&gt; ~/.bashrc
+source ~/.bashrc</pre>
+            </article>
+          </div>
+          <p class="section-copy">A failed <code>cd path</code> prints <code>Try: wtfis --up</code> for global recovery.</p>
+        </section>
+      </main>
+    </div>
+
+    <footer class="docs-footer">
+      <strong>WTFIS</strong>
+      <span>Local-first. Open source. No path archaeology.</span>
+    </footer>
+
+    <script>
+      // @ts-nocheck
+      (() => {
+        document.querySelectorAll("[data-copy]").forEach((button) => {
+          button.addEventListener("click", async () => {
+            const value = button.dataset.copy.replace(/\\n/g, "\n");
+            try {
+              await navigator.clipboard.writeText(value);
+            } catch {
+              const fallback = document.createElement("textarea");
+              fallback.value = value;
+              fallback.setAttribute("readonly", "");
+              fallback.style.position = "fixed";
+              fallback.style.opacity = "0";
+              document.body.appendChild(fallback);
+              fallback.select();
+              document.execCommand("copy");
+              fallback.remove();
+            }
+            const label = button.textContent;
+            button.textContent = "copied";
+            window.setTimeout(() => { button.textContent = label; }, 1400);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

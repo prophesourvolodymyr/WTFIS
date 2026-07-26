@@ -3,7 +3,7 @@ class Wtfis < Formula
   homepage "https://github.com/prophesourvolodymyr/WTFIS-CLI"
   url "https://github.com/prophesourvolodymyr/WTFIS-CLI/archive/refs/tags/v0.1.0.tar.gz"
   version "0.1.0"
-  license "MIT"
+  license "WTFPL"
 
   depends_on "rust" => :build
 
@@ -11,6 +11,20 @@ class Wtfis < Formula
     system "cargo", "install", *std_cargo_args(path: "Cargo.toml")
     bin.install_symlink "wtfis" => "cdd"
     pkgshare.install "shell/wtfis.zsh", "shell/wtfis.bash"
+  end
+
+  def caveats
+    <<~EOS
+      WTFIS needs shell integration to change your parent shell directory.
+
+      Zsh:
+        echo 'source "$(brew --prefix)/share/wtfis/wtfis.zsh"' >> ~/.zshrc
+        source ~/.zshrc
+
+      Bash:
+        echo 'source "$(brew --prefix)/share/wtfis/wtfis.bash"' >> ~/.bashrc
+        source ~/.bashrc
+    EOS
   end
 
   test do
