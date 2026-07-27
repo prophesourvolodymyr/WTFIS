@@ -13,7 +13,9 @@
   <img src="https://img.shields.io/badge/Windows-supported-0078D4?style=flat-square&amp;logo=windows&amp;logoColor=white" alt="Windows supported" />
 </p>
 
-<h1 align="center">Find your fucking Folder.</h1>
+<h1 align="center">WTFIS</h1>
+
+<h2 align="center">Find your fucking Folder.</h2>
 
 <p align="center">A local-first terminal finder for getting back to the folder you meant.</p>
 
@@ -53,9 +55,9 @@ Use `--up`, `--prev`, and `--recent` when you are tired of retracing your path.
 
 Tell WTFIS where to look, how far to look, and what to run after it finds something.
 
-## Install
+# Install
 
-### <img src="./public/platform-apple.svg" alt="Apple" width="18" height="18" /> macOS
+## <img src="./public/platform-apple.svg" alt="Apple" width="18" height="18" /> macOS
 
 **Homebrew**
 
@@ -77,7 +79,7 @@ source ~/.bashrc
 
 ---
 
-### <img src="./public/platform-linux.svg" alt="Linux" width="18" height="18" /> Linux
+## <img src="./public/platform-linux.svg" alt="Linux" width="18" height="18" /> Linux
 
 **Arch Linux / AUR**
 
@@ -105,7 +107,7 @@ source ~/.zshrc
 
 ---
 
-### <img src="./public/platform-windows.svg" alt="Windows" width="18" height="18" /> Windows
+## <img src="./public/platform-windows.svg" alt="Windows" width="18" height="18" /> Windows
 
 **Scoop**
 
