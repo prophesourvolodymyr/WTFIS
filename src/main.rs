@@ -93,9 +93,9 @@ const HELP_TEXT: &[&str] = &[
     "  The first run shows an introduction before opening setup.",
     "",
     "SHELL INTEGRATION",
-    "  Source shell/wtfis.zsh in Zsh or shell/wtfis.bash in Bash.",
+    "  Source shell/wtfis.zsh, shell/wtfis.bash, or shell/wtfis.ps1.",
     "  The wrapper changes the parent shell directory after selection.",
-    "  Homebrew installs the wrapper under share/wtfis and prints setup commands.",
+    "  Homebrew installs Unix wrappers; Windows uses the PowerShell wrapper.",
     "  Without the wrapper, WTFIS can print paths but cannot change your shell.",
     "  A failed `cd path` prints `Try: wtfis --up` for global recovery.",
     "",
@@ -386,6 +386,7 @@ fn render_first_run_intro(frame: &mut ratatui::Frame<'_>) {
     );
 }
 
+#[cfg(not(windows))]
 fn print_shell_setup_hint() {
     let wrapper = if env::var("SHELL").is_ok_and(|shell| shell.ends_with("bash")) {
         "wtfis.bash"
@@ -394,6 +395,13 @@ fn print_shell_setup_hint() {
     };
     eprintln!(
         "wtfis: automatic cd is off. Run:\n  source \"$(brew --prefix)/share/wtfis/{wrapper}\""
+    );
+}
+
+#[cfg(windows)]
+fn print_shell_setup_hint() {
+    eprintln!(
+        "wtfis: automatic cd is off. Run in PowerShell:\n  . \"$(Split-Path (Get-Command wtfis.exe).Source)\\wtfis.ps1\""
     );
 }
 
@@ -1813,6 +1821,24 @@ fn render_already_here(frame: &mut ratatui::Frame<'_>, message: &str) {
     );
 }
 
+fn open_url(url: &str) -> io::Result<()> {
+    #[cfg(target_os = "macos")]
+    {
+        return Command::new("open").arg(url).status().map(|_| ());
+    }
+    #[cfg(target_os = "windows")]
+    {
+        return Command::new("cmd")
+            .args(["/C", "start", "", url])
+            .status()
+            .map(|_| ());
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    {
+        Command::new("xdg-open").arg(url).status().map(|_| ())
+    }
+}
+
 fn show_coffee_popup() -> Result<(), Box<dyn std::error::Error>> {
     let height = terminal::size()
         .map(|(_, rows)| rows.clamp(7, 12))
@@ -1843,7 +1869,7 @@ fn show_coffee_popup() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
     if open_link {
-        let _ = Command::new("open").arg(COFFEE_URL).status();
+        let _ = open_url(COFFEE_URL);
     }
     session.cleanup()?;
     Ok(())

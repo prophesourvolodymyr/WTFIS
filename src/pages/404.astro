@@ -1,3 +1,7 @@
+---
+const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
+---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,7 +10,7 @@
     <meta name="theme-color" content="#1f42f3" />
     <meta name="robots" content="noindex" />
     <title>WTFIS / 404</title>
-    <link rel="icon" type="image/png" href="/Tab%20logo.png?v=1" />
+    <link rel="icon" type="image/png" href={`${base}Tab%20logo.png?v=1`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@800;900&display=swap" rel="stylesheet" />
@@ -189,8 +193,8 @@
   <body>
     <main class="not-found">
       <header class="not-found-nav">
-        <a class="brand" href="/" aria-label="WTFIS home">
-          <img src="/WTFIS%20logo%20main.png" alt="" width="1024" height="1024" />
+        <a class="brand" href={base} aria-label="WTFIS home">
+          <img src={`${base}WTFIS%20logo%20main.png`} alt="" width="1024" height="1024" />
           <span>WTFIS</span>
         </a>
         <span>404 / Path not found</span>
@@ -198,7 +202,7 @@
       <section class="not-found-content" aria-labelledby="not-found-title">
         <h1 class="code" id="not-found-title">404</h1>
         <p class="message">Nothing Fucking to see here.</p>
-        <a class="home-link" href="/">&lt;- Back home</a>
+        <a class="home-link" href={base}>&lt;- Back home</a>
       </section>
       <footer class="not-found-meta">
         <span>WTFIS CLI</span>

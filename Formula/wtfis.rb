@@ -10,7 +10,7 @@ class Wtfis < Formula
   def install
     system "cargo", "install", *std_cargo_args(path: "Cargo.toml")
     bin.install_symlink "wtfis" => "cdd"
-    pkgshare.install "shell/wtfis.zsh", "shell/wtfis.bash"
+    pkgshare.install "shell/wtfis.zsh", "shell/wtfis.bash", "shell/wtfis.ps1"
   end
 
   def caveats

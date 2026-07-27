@@ -1,3 +1,7 @@
+---
+const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
+---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -501,13 +505,13 @@
     <div class="docs-grid" aria-hidden="true"></div>
 
     <header class="docs-nav">
-      <a class="docs-brand" href="/" aria-label="WTFIS home">
-        <img src="/WTFIS%20logo%20main.png" alt="" width="1024" height="1024" />
+        <a class="docs-brand" href={base} aria-label="WTFIS home">
+          <img src={`${base}WTFIS%20logo%20main.png`} alt="" width="1024" height="1024" />
       </a>
       <nav class="docs-nav-links" aria-label="Documentation navigation">
-        <a href="/#pain-point">home</a>
+        <a href={`${base}#pain-point`}>home</a>
         <a href="https://github.com/prophesourvolodymyr/WTFIS-CLI" target="_blank" rel="noreferrer">github</a>
-        <a href="/#playground">try WTFIS</a>
+        <a href={`${base}#playground`}>try WTFIS</a>
       </nav>
     </header>
 

@@ -1,3 +1,7 @@
+---
+const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
+---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -5,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#1f42f3" />
     <title>WTFIS / People Spend 5 hours a Year Finding Directories</title>
-    <link rel="icon" type="image/png" href="/Tab%20logo.png?v=1" />
+    <link rel="icon" type="image/png" href={`${base}Tab%20logo.png?v=1`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -361,7 +365,7 @@
         margin: 0;
         color: var(--white);
         font-family: "Inter", sans-serif;
-        font-size: clamp(3.45rem, 9.25vw, 10.8rem);
+        font-size: clamp(3rem, 8.2vw, 9.7rem);
         font-weight: 900;
         letter-spacing: -0.066em;
         line-height: 0.76;
@@ -2729,15 +2733,15 @@
 
         .title-lockup {
           width: 100%;
-          font-size: clamp(2.25rem, 9.65vw, 4.7rem);
+          font-size: clamp(1.7rem, 8vw, 3.8rem);
           letter-spacing: -0.066em;
           line-height: 0.78;
         }
 
         .title-row {
-          flex-wrap: wrap;
-          gap: 0.1em 0.16em;
-          white-space: normal;
+          flex-wrap: nowrap;
+          gap: 0.1em;
+          white-space: nowrap;
         }
 
         .what-title {
@@ -3042,10 +3046,10 @@
     <div class="unified-grid-layer" aria-hidden="true"></div>
     <nav class="top-nav" aria-label="WTFIS showcase navigation">
       <a class="menu-brand" href="#pain-point" aria-label="WTFIS home">
-        <img src="/WTFIS%20logo%20main.png" alt="" width="1024" height="1024" />
+        <img src={`${base}WTFIS%20logo%20main.png`} alt="" width="1024" height="1024" />
       </a>
       <div class="menu-links">
-        <a class="menu-pill" href="/docs">docs</a>
+        <a class="menu-pill" href={`${base}docs/`}>docs</a>
         <a class="menu-pill" href="https://github.com/prophesourvolodymyr/WTFIS-CLI" target="_blank" rel="noreferrer">github</a>
         <a class="menu-pill menu-coffee" href="https://buymeacoffee.com/professorvolodymyr" target="_blank" rel="noreferrer" aria-label="Support WTFIS">☕️</a>
         <a class="menu-pill menu-cta" id="cta-button" href="#cta-stage">try &gt;WTFIS</a>
@@ -3085,7 +3089,7 @@
               <span class="word" data-emoji="📁"><span class="word-text">People</span></span>
               <span class="media-card media-card--image media-card--people" role="img" aria-label="Developer working at a computer">
                 <span class="media-card__surface">
-                  <img class="hero-media-image" src="/People%20image%201.png" alt="" width="1448" height="1086" />
+                  <img class="hero-media-image" src={`${base}People%20image%201.png`} alt="" width="1448" height="1086" />
                 </span>
               </span>
               <span class="word" data-emoji="⏳"><span class="word-text">Spend</span></span>
@@ -3106,7 +3110,7 @@
               <span class="word" data-emoji="🗓️"><span class="word-text">a Year</span></span>
               <span class="media-card media-card--image media-card--wide" role="img" aria-label="2026 with a red flower">
                 <span class="media-card__surface">
-                  <img class="hero-media-image" src="/2026%20image%203.png" alt="" width="1916" height="821" />
+                  <img class="hero-media-image" src={`${base}2026%20image%203.png`} alt="" width="1916" height="821" />
                 </span>
               </span>
             </span>
@@ -3114,7 +3118,7 @@
               <span class="word" data-emoji="🔎"><span class="word-text">Finding</span></span>
               <span class="media-card media-card--image media-card--cdx" role="img" aria-label="A failed change-directory command">
                 <span class="media-card__surface">
-                  <img class="hero-media-image" src="/CD%20X.png" alt="" width="1448" height="1086" />
+                  <img class="hero-media-image" src={`${base}CD%20X.png`} alt="" width="1448" height="1086" />
                 </span>
               </span>
               <span class="word" data-emoji="📂"><span class="word-text">Directories</span></span>
@@ -3333,25 +3337,25 @@
               <div class="cta-stack-inner scroll-stack-inner" id="cta-stack-inner">
                 <figure class="cta-card scroll-stack-card">
                   <div class="cta-shot has-image">
-                    <img class="cta-shot-image" src="/TUI%20showcase.png" alt="WTFIS terminal interface listing matched directories" decoding="async" width="1541" height="1201" />
+                    <img class="cta-shot-image" src={`${base}TUI%20showcase.png`} alt="WTFIS terminal interface listing matched directories" decoding="async" width="1541" height="1201" />
                   </div>
                     <figcaption><strong>Rich TUI.</strong><span>See the matches in your terminal, pick one, and get back to work.</span></figcaption>
                 </figure>
                 <figure class="cta-card scroll-stack-card">
                   <div class="cta-shot has-image">
-                    <img class="cta-shot-image" src="/COmmands%20showcase.png" alt="WTFIS command shortcuts for finding directories" decoding="async" width="1541" height="1201" />
+                    <img class="cta-shot-image" src={`${base}COmmands%20showcase.png`} alt="WTFIS command shortcuts for finding directories" decoding="async" width="1541" height="1201" />
                   </div>
                   <figcaption><strong>Built-in commands.</strong><span>Use <code>cdd</code> to find the folder, then add a command for WTFIS to run after <code>cd</code>.</span></figcaption>
                 </figure>
                 <figure class="cta-card scroll-stack-card">
                   <div class="cta-shot has-image">
-                    <img class="cta-shot-image" src="/productivity-commands.png" alt="WTFIS productivity commands for navigating folder history" decoding="async" width="1541" height="1201" />
+                    <img class="cta-shot-image" src={`${base}productivity-commands.png`} alt="WTFIS productivity commands for navigating folder history" decoding="async" width="1541" height="1201" />
                   </div>
                     <figcaption><strong>Productivity shortcuts.</strong><span>Use <code>--up</code>, <code>--prev</code>, and <code>--recent</code> instead of retracing your path.</span></figcaption>
                 </figure>
                 <figure class="cta-card scroll-stack-card">
                   <div class="cta-shot has-image">
-                    <img class="cta-shot-image" src="/Deep%20Settings.png" alt="WTFIS settings for configuring directory discovery" decoding="async" width="1541" height="1201" />
+                    <img class="cta-shot-image" src={`${base}Deep%20Settings.png`} alt="WTFIS settings for configuring directory discovery" decoding="async" width="1541" height="1201" />
                   </div>
                     <figcaption><strong>Rich settings.</strong><span>Choose the folders WTFIS checks, how deep it looks, and what it runs.</span></figcaption>
                 </figure>
@@ -3392,7 +3396,7 @@
       <div class="footer-top">
         <span>You remembered the project. Not the path.</span>
         <nav class="footer-links" aria-label="Footer links">
-          <a href="/docs">docs</a>
+          <a href={`${base}docs/`}>docs</a>
           <a href="https://github.com/prophesourvolodymyr/WTFIS-CLI" target="_blank" rel="noreferrer">github</a>
         </nav>
       </div>
