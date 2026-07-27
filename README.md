@@ -1,32 +1,92 @@
-# WTFIS
+<p align="center">
+  <img src="public/Tab%20logo.png" alt="WTFIS logo" width="180" />
+</p>
 
-**Where the fuck is** your project?
+<h1 align="center">Find your fucking Folder.</h1>
 
-`wtfis` is a local-first, inline terminal project finder. `cdd` is its short alias. Type a project name, fix a typo, press Enter, and the shell changes into the selected directory.
+<p align="center">A local-first, inline terminal finder for getting back to the folder you meant.</p>
+
+`wtfis` finds folders from a name, path, or typo. `cdd` is its short alias. Pick a match, press Enter, and your shell moves there.
+
+## See It Work
+
+### Rich TUI
+
+<img src="public/TUI%20showcase.png" alt="WTFIS terminal interface listing matched directories" width="720" />
+
+Search locally, inspect the matches, and choose the exact folder without leaving your terminal.
+
+### Built-in Commands
+
+<img src="public/COmmands%20showcase.png" alt="WTFIS command shortcuts for finding directories" width="720" />
+
+Use `cdd` to find a folder, then attach a command for WTFIS to run after `cd`.
+
+### Productivity Shortcuts
+
+<img src="public/productivity-commands.png" alt="WTFIS productivity commands for navigating folder history" width="720" />
+
+Use `--up`, `--prev`, and `--recent` instead of retracing your path.
+
+### Rich Settings
+
+<img src="public/Deep%20Settings.png" alt="WTFIS settings for configuring directory discovery" width="720" />
+
+Choose search roots, depth, and the commands WTFIS can run after selecting a folder.
 
 ## Install
+
+### macOS
+
+Install with Homebrew, then source the wrapper once so WTFIS can change your current shell directory.
 
 ```bash
 brew tap prophesourvolodymyr/wtfis
 brew install wtfis
+
+# Zsh
+cat "$(brew --prefix)/share/wtfis/wtfis.zsh" >> ~/.zshrc
+source ~/.zshrc
 ```
 
-Then add the shell integration once:
+For Bash, source `wtfis.bash` from the same Homebrew directory in `~/.bashrc`.
+
+### Linux
+
+Download the `wtfis-linux-x86_64.tar.gz` asset from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest), extract it, and install the binaries plus shell wrapper:
 
 ```bash
-cat "$(brew --prefix)/share/wtfis/wtfis.zsh" >> ~/.zshrc
+tar -xzf wtfis-linux-x86_64.tar.gz
+mkdir -p ~/.local/bin ~/.local/share/wtfis
+install -m 755 wtfis-linux-x86_64/wtfis wtfis-linux-x86_64/cdd ~/.local/bin/
+cp -R wtfis-linux-x86_64/shell ~/.local/share/wtfis
+
+# Bash
+echo 'source "$HOME/.local/share/wtfis/wtfis.bash"' >> ~/.bashrc
+source ~/.bashrc
 ```
 
-Restart your shell. For Bash, use `wtfis.bash` instead.
+For Zsh, source `~/.local/share/wtfis/wtfis.zsh` from `~/.zshrc` instead.
 
-For PowerShell on Windows, dot-source `shell/wtfis.ps1` from your PowerShell profile.
+### Windows
+
+Download `wtfis-windows-x86_64.zip` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest). In PowerShell, extract it, add the binary directory to the current session, and load the wrapper:
+
+```powershell
+Expand-Archive .\wtfis-windows-x86_64.zip -DestinationPath $env:LOCALAPPDATA\WTFIS -Force
+$install = "$env:LOCALAPPDATA\WTFIS\wtfis-windows-x86_64"
+$env:Path += ";$install"
+. "$install\shell\wtfis.ps1"
+```
+
+To load the wrapper in future PowerShell sessions, add `. "$install\shell\wtfis.ps1"` to your `$PROFILE`.
 
 ## Use
 
 ```bash
 wtfis                    # open inline search
-wtfis Mascotify          # search immediately
-cdd Mascotify            # short alias
+wtfis my-project         # search immediately
+cdd my-project           # short alias
 wtfis --set              # configure search roots
 wtfis --up               # recover a failed cd with a global search
 wtfis --prev             # return to the previous directory
@@ -36,7 +96,7 @@ wtfis --where            # print the detected project root
 wtfis --home             # go to your home directory
 wtfis --recent           # open recent projects in the selector
 wtfis /opencode          # cd to the selected project and run opencode
-wtfis Mascotify /opencode # search a project, then run a command
+wtfis my-project /opencode # search a project, then run a command
 wtfis --help             # open the inline command guide
 ```
 
@@ -60,7 +120,7 @@ The configuration also supports `exact_depth` as a maximum directory depth, for 
 
 ```bash
 cargo test
-cargo run -- Mascotify
+cargo run -- my-project
 ```
 
 ## License

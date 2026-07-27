@@ -308,6 +308,29 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
         margin-top: 1.6rem;
       }
 
+      .install-platform {
+        margin-top: 2.2rem;
+        border-top: 1px solid var(--line);
+        padding-top: 1.4rem;
+      }
+
+      .install-platform:first-of-type {
+        margin-top: 1.6rem;
+      }
+
+      .install-platform h3 {
+        margin: 0;
+        color: var(--deep-blue);
+        font-family: "Inter", sans-serif;
+        font-size: 1.15rem;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+
+      .install-platform .section-copy {
+        margin-top: 0.5rem;
+      }
+
       .code-block {
         position: relative;
         overflow: auto;
@@ -536,7 +559,7 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
           <p class="docs-kicker">Local-first / inline project finder</p>
           <h1 class="docs-title">WTFIS<br />HELP.</h1>
           <p class="docs-lede">
-            Where the fuck is your project? WTFIS looks through your local folders, handles fuzzy matches, and drops your shell into the folder you meant.
+            Find your fucking Folder. WTFIS searches locally, handles fuzzy matches, and drops your shell into the folder you meant.
           </p>
 
           <div class="terminal-preview" aria-label="WTFIS help terminal preview">
@@ -547,8 +570,8 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
               <span>wtfis / help</span>
             </div>
             <pre><span class="terminal-command">$ wtfis --help</span>
-Where the fuck is your project?
-A local-first, inline project finder for shells that should know where you work.
+Find your fucking Folder.
+A local-first, inline folder finder for shells that should know where you work.
 
 USAGE
   wtfis QUERY            Search immediately
@@ -562,23 +585,54 @@ HELP CONTROLS
 
         <section class="docs-section" id="install">
           <h2 class="section-heading"><span class="section-number">01</span>Install</h2>
-          <p class="section-copy">Install with Homebrew, then source the wrapper once. The wrapper is what lets WTFIS change your current shell after you pick a folder.</p>
-          <div class="install-block">
-            <div class="code-block"><button class="copy-code" type="button" data-copy="brew tap prophesourvolodymyr/wtfis\nbrew install wtfis">copy</button>brew tap prophesourvolodymyr/wtfis
+          <p class="section-copy">Install the binary for your operating system, then load its wrapper once. The wrapper is what lets WTFIS change your current shell after you pick a folder.</p>
+
+          <section class="install-platform" aria-labelledby="install-macos">
+            <h3 id="install-macos">macOS</h3>
+            <p class="section-copy">Homebrew installs both the binaries and shell wrappers.</p>
+            <div class="install-block">
+              <div class="code-block"><button class="copy-code" type="button" data-copy="brew tap prophesourvolodymyr/wtfis\nbrew install wtfis">copy</button>brew tap prophesourvolodymyr/wtfis
 brew install wtfis</div>
-            <div class="code-block"><button class="copy-code" type="button" data-copy='cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc'>copy</button>cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc
+              <div class="code-block"><button class="copy-code" type="button" data-copy='cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc\nsource ~/.zshrc'>copy</button>cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc
 source ~/.zshrc</div>
-          </div>
-          <p class="section-copy">For Bash, source <code>wtfis.bash</code> instead. Without shell integration, WTFIS prints paths but cannot move the parent shell.</p>
+            </div>
+            <p class="section-copy">For Bash, source <code>wtfis.bash</code> from the same Homebrew directory in <code>~/.bashrc</code>.</p>
+          </section>
+
+          <section class="install-platform" aria-labelledby="install-linux">
+            <h3 id="install-linux">Linux</h3>
+            <p class="section-copy">Download <code>wtfis-linux-x86_64.tar.gz</code> from the latest GitHub release, then install the binaries and Bash wrapper.</p>
+            <div class="install-block">
+              <div class="code-block"><button class="copy-code" type="button" data-copy="tar -xzf wtfis-linux-x86_64.tar.gz\nmkdir -p ~/.local/bin ~/.local/share/wtfis\ninstall -m 755 wtfis-linux-x86_64/wtfis wtfis-linux-x86_64/cdd ~/.local/bin/\ncp -R wtfis-linux-x86_64/shell ~/.local/share/wtfis">copy</button>tar -xzf wtfis-linux-x86_64.tar.gz
+mkdir -p ~/.local/bin ~/.local/share/wtfis
+install -m 755 wtfis-linux-x86_64/wtfis wtfis-linux-x86_64/cdd ~/.local/bin/
+cp -R wtfis-linux-x86_64/shell ~/.local/share/wtfis</div>
+              <div class="code-block"><button class="copy-code" type="button" data-copy="echo 'source &quot;$HOME/.local/share/wtfis/wtfis.bash&quot;' &gt;&gt; ~/.bashrc\nsource ~/.bashrc">copy</button>echo 'source "$HOME/.local/share/wtfis/wtfis.bash"' &gt;&gt; ~/.bashrc
+source ~/.bashrc</div>
+            </div>
+            <p class="section-copy">For Zsh, source <code>~/.local/share/wtfis/wtfis.zsh</code> from <code>~/.zshrc</code>.</p>
+          </section>
+
+          <section class="install-platform" aria-labelledby="install-windows">
+            <h3 id="install-windows">Windows</h3>
+            <p class="section-copy">Download <code>wtfis-windows-x86_64.zip</code> from the latest GitHub release, then extract it and load the PowerShell wrapper.</p>
+            <div class="install-block">
+              <div class="code-block"><button class="copy-code" type="button" data-copy='Expand-Archive .\wtfis-windows-x86_64.zip -DestinationPath $env:LOCALAPPDATA\WTFIS -Force\n$install = "$env:LOCALAPPDATA\WTFIS\wtfis-windows-x86_64"\n$env:Path += ";$install"\n. "$install\shell\wtfis.ps1"'>copy</button>Expand-Archive .\wtfis-windows-x86_64.zip -DestinationPath $env:LOCALAPPDATA\WTFIS -Force
+$install = "$env:LOCALAPPDATA\WTFIS\wtfis-windows-x86_64"
+$env:Path += ";$install"
+. "$install\shell\wtfis.ps1"</div>
+            </div>
+            <p class="section-copy">Add <code>. "$install\shell\wtfis.ps1"</code> to your PowerShell <code>$PROFILE</code> to load the wrapper in future sessions.</p>
+          </section>
         </section>
 
         <section class="docs-section" id="usage">
           <h2 class="section-heading"><span class="section-number">02</span>Usage</h2>
           <p class="section-copy">Run WTFIS on its own for recent projects. Pass a project name, path, typo, or command preset when you already know what you want.</p>
-          <div class="code-block"><button class="copy-code" type="button" data-copy="wtfis\nwtfis Mascotify\ncdd Mascotify\nwtfis Mascotify /opencode">copy</button>wtfis                         # open inline search
-wtfis Mascotify              # search immediately
-cdd Mascotify                # short alias
-wtfis Mascotify /opencode    # search, enter, and run a command</div>
+          <div class="code-block"><button class="copy-code" type="button" data-copy="wtfis\nwtfis my-project\ncdd my-project\nwtfis my-project /opencode">copy</button>wtfis                         # open inline search
+wtfis my-project              # search immediately
+cdd my-project                # short alias
+wtfis my-project /opencode    # search, enter, and run a command</div>
           <p class="section-copy">Running <code>wtfis</code> with no query does not scan anything. It opens with up to five recent folders, then starts searching when you type.</p>
         </section>
 
