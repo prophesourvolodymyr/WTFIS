@@ -19,11 +19,10 @@
 
 `wtfis` finds folders from a name, path, or typo. `cdd` is the short alias. Pick a match, press Enter, and your shell goes there.
 
-## See it work
-
 <p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
 
-g
+## See it work
+
 ### Rich TUI
 
 <img src="public/TUI%20showcase.png" alt="WTFIS terminal interface listing matched directories" width="720" />
