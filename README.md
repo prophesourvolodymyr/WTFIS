@@ -51,7 +51,7 @@ Use `--up`, `--prev`, and `--recent` when you are tired of retracing your path.
 
 ### Settings
 
-<img src="public/Deep%20Settings.png" alt="WTFIS settings for configuring directory discovery" width="720" />
+<img src="public/settings-updated.png" alt="WTFIS settings for configuring directory discovery" width="720" />
 
 Tell WTFIS where to look, how far to look, and what to run after it finds something.
 
