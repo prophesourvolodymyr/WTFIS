@@ -55,9 +55,9 @@ Tell WTFIS where to look, how far to look, and what to run after it finds someth
 
 ## Install
 
-### macOS
+### Homebrew on macOS and Linux
 
-Homebrew installs the binary and wrapper. Source the wrapper once so WTFIS can change your current shell directory.
+Homebrew installs the binary and shell wrappers. Source the wrapper once so WTFIS can change your current shell directory.
 
 ```bash
 brew tap prophesourvolodymyr/wtfis
@@ -68,11 +68,52 @@ cat "$(brew --prefix)/share/wtfis/wtfis.zsh" >> ~/.zshrc
 source ~/.zshrc
 ```
 
-For Bash, source `wtfis.bash` from the same Homebrew directory in `~/.bashrc`.
+For Bash, add this to `~/.bashrc` instead:
 
-### Linux
+```bash
+echo 'source "$(brew --prefix)/share/wtfis/wtfis.bash"' >> ~/.bashrc
+source ~/.bashrc
+```
 
-Grab `wtfis-linux-x86_64.tar.gz` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest), extract it, then put the binaries and wrapper where your shell can use them.
+### Scoop on Windows
+
+Scoop uses the public WTFIS bucket and installs the Windows release archive without administrator access.
+
+```powershell
+scoop bucket add wtfis https://github.com/prophesourvolodymyr/homebrew-wtfis
+scoop install wtfis
+
+$install = "$env:USERPROFILE\scoop\apps\wtfis\current"
+. "$install\shell\wtfis.ps1"
+```
+
+To load the PowerShell wrapper in future sessions:
+
+```powershell
+Add-Content $PROFILE '. "$env:USERPROFILE\scoop\apps\wtfis\current\shell\wtfis.ps1"'
+```
+
+### Arch Linux (AUR)
+
+The Arch package is named `wtfis-cli` because `wtfis` is already used by an unrelated package. The PKGBUILD is ready in `packaging/aur/`; AUR publication is pending maintainer SSH authentication.
+
+Once published, install it with:
+
+```bash
+yay -S wtfis-cli
+```
+
+### GitHub Releases
+
+Direct archives are available from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest):
+
+- `wtfis-macos-arm64.tar.gz`
+- `wtfis-linux-x86_64.tar.gz`
+- `wtfis-windows-x86_64.zip`
+
+Extract an archive, add its binary directory to `PATH`, and source the matching shell wrapper from its `shell/` directory.
+
+For a manual Linux install:
 
 ```bash
 tar -xzf wtfis-linux-x86_64.tar.gz
@@ -87,9 +128,7 @@ source ~/.bashrc
 
 For Zsh, source `~/.local/share/wtfis/wtfis.zsh` from `~/.zshrc` instead.
 
-### Windows
-
-Grab `wtfis-windows-x86_64.zip` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest). Extract it in PowerShell, add the binary directory to this session, and load the wrapper.
+For a manual Windows install:
 
 ```powershell
 Expand-Archive .\wtfis-windows-x86_64.zip -DestinationPath $env:LOCALAPPDATA\WTFIS -Force
