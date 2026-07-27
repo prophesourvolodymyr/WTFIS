@@ -19,9 +19,13 @@
 
 `wtfis` finds folders from a name, path, or typo. `cdd` is the short alias. Pick a match, press Enter, and your shell goes there.
 
-<p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
-
 ## See it work
+
+### Easy as fuck commands
+
+<img src="public/Wtfis%20commands%20showcase.png" alt="Terminal commands using wtfis and cdd to move between folders" width="720" />
+
+Like swearing? Type `wtfis`. In a hurry? `cdd`.
 
 ### Rich TUI
 
@@ -46,6 +50,8 @@ Use `--up`, `--prev`, and `--recent` when you are tired of retracing your path.
 <img src="public/Deep%20Settings.png" alt="WTFIS settings for configuring directory discovery" width="720" />
 
 Tell WTFIS where to look, how far to look, and what to run after it finds something.
+
+<p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
 
 ## Install
 
