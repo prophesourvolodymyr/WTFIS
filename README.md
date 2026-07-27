@@ -2,43 +2,56 @@
   <img src="public/Tab%20logo.png" alt="WTFIS logo" width="180" />
 </p>
 
+<p align="center">
+  <a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/Rust-000000?style=flat-square&amp;logo=rust&amp;logoColor=white" alt="Built with Rust" /></a>
+  <a href="https://github.com/prophesourvolodymyr/WTFIS-CLI/actions/workflows/ci.yml"><img src="https://github.com/prophesourvolodymyr/WTFIS-CLI/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://github.com/prophesourvolodymyr/WTFIS-CLI/releases"><img src="https://img.shields.io/github/v/release/prophesourvolodymyr/WTFIS-CLI?display_name=tag&amp;style=flat-square" alt="Latest release" /></a>
+  <a href="https://github.com/prophesourvolodymyr/WTFIS-CLI/blob/main/LICENSE"><img src="https://img.shields.io/github/license/prophesourvolodymyr/WTFIS-CLI?style=flat-square" alt="WTFPL license" /></a>
+  <a href="https://github.com/prophesourvolodymyr/homebrew-wtfis"><img src="https://img.shields.io/badge/Homebrew-tap-FBB040?style=flat-square&amp;logo=homebrew&amp;logoColor=white" alt="Homebrew tap" /></a>
+  <img src="https://img.shields.io/badge/macOS-supported-000000?style=flat-square&amp;logo=apple&amp;logoColor=white" alt="macOS supported" />
+  <img src="https://img.shields.io/badge/Linux-supported-FCC624?style=flat-square&amp;logo=linux&amp;logoColor=black" alt="Linux supported" />
+  <img src="https://img.shields.io/badge/Windows-supported-0078D4?style=flat-square&amp;logo=windows&amp;logoColor=white" alt="Windows supported" />
+</p>
+
 <h1 align="center">Find your fucking Folder.</h1>
 
-<p align="center">A local-first, inline terminal finder for getting back to the folder you meant.</p>
+<p align="center">A local-first terminal finder for getting back to the folder you meant.</p>
 
-`wtfis` finds folders from a name, path, or typo. `cdd` is its short alias. Pick a match, press Enter, and your shell moves there.
+<p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
 
-## See It Work
+`wtfis` finds folders from a name, path, or typo. `cdd` is the short alias. Pick a match, press Enter, and your shell goes there.
+
+## See it work
 
 ### Rich TUI
 
 <img src="public/TUI%20showcase.png" alt="WTFIS terminal interface listing matched directories" width="720" />
 
-Search locally, inspect the matches, and choose the exact folder without leaving your terminal.
+Search locally, pick the right folder, get back to work.
 
-### Built-in Commands
+### Built-in commands
 
 <img src="public/COmmands%20showcase.png" alt="WTFIS command shortcuts for finding directories" width="720" />
 
-Use `cdd` to find a folder, then attach a command for WTFIS to run after `cd`.
+Use `cdd` to find a folder. Add a command if you want WTFIS to run something after `cd`.
 
-### Productivity Shortcuts
+### Productivity shortcuts
 
 <img src="public/productivity-commands.png" alt="WTFIS productivity commands for navigating folder history" width="720" />
 
-Use `--up`, `--prev`, and `--recent` instead of retracing your path.
+Use `--up`, `--prev`, and `--recent` when you are tired of retracing your path.
 
-### Rich Settings
+### Settings
 
 <img src="public/Deep%20Settings.png" alt="WTFIS settings for configuring directory discovery" width="720" />
 
-Choose search roots, depth, and the commands WTFIS can run after selecting a folder.
+Tell WTFIS where to look, how far to look, and what to run after it finds something.
 
 ## Install
 
 ### macOS
 
-Install with Homebrew, then source the wrapper once so WTFIS can change your current shell directory.
+Homebrew installs the binary and wrapper. Source the wrapper once so WTFIS can change your current shell directory.
 
 ```bash
 brew tap prophesourvolodymyr/wtfis
@@ -53,7 +66,7 @@ For Bash, source `wtfis.bash` from the same Homebrew directory in `~/.bashrc`.
 
 ### Linux
 
-Download the `wtfis-linux-x86_64.tar.gz` asset from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest), extract it, and install the binaries plus shell wrapper:
+Grab `wtfis-linux-x86_64.tar.gz` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest), extract it, then put the binaries and wrapper where your shell can use them.
 
 ```bash
 tar -xzf wtfis-linux-x86_64.tar.gz
@@ -70,7 +83,7 @@ For Zsh, source `~/.local/share/wtfis/wtfis.zsh` from `~/.zshrc` instead.
 
 ### Windows
 
-Download `wtfis-windows-x86_64.zip` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest). In PowerShell, extract it, add the binary directory to the current session, and load the wrapper:
+Grab `wtfis-windows-x86_64.zip` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest). Extract it in PowerShell, add the binary directory to this session, and load the wrapper.
 
 ```powershell
 Expand-Archive .\wtfis-windows-x86_64.zip -DestinationPath $env:LOCALAPPDATA\WTFIS -Force
@@ -100,21 +113,21 @@ wtfis my-project /opencode # search a project, then run a command
 wtfis --help             # open the inline command guide
 ```
 
-`--prev`, `--root`, `--last`, and `--home` change directories directly without opening the selector. `--where` only prints the detected project root. `--recent` opens the recent-project selector.
+`--prev`, `--root`, `--last`, and `--home` skip the selector and change directories directly. `--where` prints the detected project root. `--recent` opens your recent folders.
 
-On the first run, WTFIS shows a short inline introduction, then opens the setup wizard for search roots and preferences.
+On first run, WTFIS shows a short introduction and opens setup for search roots and preferences.
 
-V1 uses local fuzzy matching and searches relevant project folders by default. Use `wtfis --set` to enable broader global recovery, add custom roots, or change depth. It does not upload paths or project data. Semantic search is planned for V2.
+WTFIS uses local fuzzy matching and searches the folders you care about by default. Use `wtfis --set` to add roots, change depth, or turn on broader recovery. It does not upload your paths or project data.
 
-Launching `wtfis` with no query does not scan the filesystem. It opens immediately with up to five recently opened folders; scanning begins when you type the first search character.
+Run `wtfis` with no query and it opens straight into your recent folders. It starts scanning when you type.
 
-Type `/` in the selector to browse command presets. Use `/add` to choose a project and attach a preset or custom command, `/exit` to cancel, or `/opencode` and similar commands to enter the project and run the command immediately. Configure presets with `wtfis --set`.
+Type `/` in the selector for command presets. `/add` attaches a preset or custom command to a folder. `/exit` backs out. `/opencode` and similar commands enter the folder and run straight away. Configure presets with `wtfis --set`.
 
-The inline guide from `wtfis --help` documents every available command and control. Inside the finder, use Up/Down and Enter to navigate, Escape to cancel, or click results with the mouse. Trackpad/mouse-wheel scrolling is intentionally ignored inside the inline UI. A unique confident fuzzy match opens directly; ambiguous matches stay in the selector.
+`wtfis --help` lists every command and control. Inside the finder, use Up/Down and Enter, press Escape to cancel, or click a result. Trackpad and mouse-wheel scrolling are ignored there on purpose. A clear fuzzy match opens directly; close calls stay in the selector.
 
-The Rust core is cross-platform. Linux uses Bash/Zsh integration, while Windows uses the PowerShell wrapper to change the parent shell directory.
+The Rust core runs on macOS, Linux, and Windows. Linux uses Bash or Zsh integration. Windows uses the PowerShell wrapper to change the parent shell directory.
 
-The configuration also supports `exact_depth` as a maximum directory depth, for example `roots = ["/Users/you/GSpace"]` with `exact_depth = 3` searches the root's first, second, and third layers. Shallower matches rank first, while exact names at deeper layers still match directly.
+`exact_depth` sets the maximum search depth. With `roots = ["/Users/you/GSpace"]` and `exact_depth = 3`, WTFIS checks the first three layers below that root. Shallow matches rank first, but an exact name still wins deeper down.
 
 ## Development
 
