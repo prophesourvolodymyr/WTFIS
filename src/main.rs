@@ -96,7 +96,7 @@ const HELP_TEXT: &[&str] = &[
     "  Source shell/wtfis.zsh, shell/wtfis.bash, or shell/wtfis.ps1.",
     "  In PowerShell, dot-source wtfis.ps1 to enable parent-shell cd.",
     "  The wrapper changes the parent shell directory after selection.",
-    "  Homebrew installs Unix wrappers; Windows uses the PowerShell wrapper.",
+    "  macOS/Linux use Bash or Zsh wrappers; Windows uses PowerShell.",
     "  Without the wrapper, WTFIS can print paths but cannot change your shell.",
     "  A failed `cd path` prints `Try: wtfis --up` for global recovery.",
     "",
@@ -400,7 +400,7 @@ fn render_first_run_intro(frame: &mut ratatui::Frame<'_>) {
     );
 }
 
-#[cfg(not(windows))]
+#[cfg(target_os = "macos")]
 fn print_shell_setup_hint() {
     let wrapper = if env::var("SHELL").is_ok_and(|shell| shell.ends_with("bash")) {
         "wtfis.bash"
@@ -410,6 +410,40 @@ fn print_shell_setup_hint() {
     eprintln!(
         "wtfis: automatic cd is off. Run:\n  source \"$(brew --prefix)/share/wtfis/{wrapper}\""
     );
+}
+
+#[cfg(all(unix, not(target_os = "macos")))]
+fn print_shell_setup_hint() {
+    let wrapper = if env::var("SHELL").is_ok_and(|shell| shell.ends_with("bash")) {
+        "wtfis.bash"
+    } else {
+        "wtfis.zsh"
+    };
+    let wrapper_path = unix_wrapper_path(wrapper);
+    eprintln!(
+        "wtfis: automatic cd is off. Run:\n  source \"{}\"",
+        wrapper_path.display()
+    );
+}
+
+#[cfg(all(unix, not(target_os = "macos")))]
+fn unix_wrapper_path(wrapper: &str) -> PathBuf {
+    let executable_path = env::current_exe().ok().and_then(|executable| {
+        executable
+            .parent()?
+            .parent()
+            .map(|prefix| prefix.join("share/wtfis").join(wrapper))
+    });
+    let candidates = [
+        executable_path,
+        Some(PathBuf::from("/usr/share/wtfis").join(wrapper)),
+        dirs::home_dir().map(|home| home.join(".local/share/wtfis").join(wrapper)),
+    ];
+    candidates
+        .into_iter()
+        .flatten()
+        .find(|path| path.exists())
+        .unwrap_or_else(|| PathBuf::from("/usr/share/wtfis").join(wrapper))
 }
 
 #[cfg(windows)]
@@ -2524,7 +2558,7 @@ fn render_settings(frame: &mut ratatui::Frame<'_>, state: &SettingsState, wizard
             };
             let (label, value): (&str, String) = if row == SETTINGS_GLOBAL_ROW {
                 (
-                    "Global Mac search",
+                    "Global filesystem search",
                     if global_search_enabled(&state.config) {
                         "ON".to_string()
                     } else {
