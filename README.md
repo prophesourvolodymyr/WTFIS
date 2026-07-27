@@ -21,6 +21,8 @@
 
 ## See it work
 
+<p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
+
 ### Easy as fuck commands
 
 <img src="public/Wtfis%20commands%20showcase.png" alt="Terminal commands using wtfis and cdd to move between folders" width="720" />
@@ -50,8 +52,6 @@ Use `--up`, `--prev`, and `--recent` when you are tired of retracing your path.
 <img src="public/Deep%20Settings.png" alt="WTFIS settings for configuring directory discovery" width="720" />
 
 Tell WTFIS where to look, how far to look, and what to run after it finds something.
-
-<p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
 
 ## Install
 
