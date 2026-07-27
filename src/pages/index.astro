@@ -97,11 +97,15 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
       .loading-mark strong {
         display: block;
         max-width: 94vw;
+        color: var(--white);
         font-family: "Inter", sans-serif;
         font-size: clamp(2.35rem, 9vw, 9.4rem);
         font-weight: 900;
         letter-spacing: -0.08em;
         line-height: 0.82;
+        text-shadow:
+          0.034em 0.034em 0 var(--electric-blue-deep),
+          0.065em 0.065em 0 rgba(8, 30, 151, 0.62);
         white-space: nowrap;
         transform-origin: 50% 100%;
       }
@@ -1655,6 +1659,18 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
         display: flex;
         flex: 1;
         min-height: 0;
+      }
+
+      .cli-simulator[hidden] {
+        display: none !important;
+      }
+
+      .terminal-body > [hidden] {
+        display: none !important;
+      }
+
+      .terminal-panel.is-cli .terminal-body {
+        padding: 0.65rem;
       }
 
       .cli-window {
@@ -3505,6 +3521,7 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
         let cdWrongTurns = 0;
         let cdEntryWasPasted = false;
         let terminalMode = "wtfis";
+        let cliSelectedIndex = 0;
            const notificationTimers = new WeakMap();
           let morphOpenWidthPx = 0;
           let morphPhraseFit = 1;
@@ -3797,13 +3814,28 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
           if (wtfisPrompt) wtfisPrompt.textContent = terminalPrompt(currentDirectory, finderCommand());
         }
 
+        function getCliMatches(query) {
+          const normalizedQuery = normalizeSearch(query);
+          if (!normalizedQuery) return labProjects.slice(0, 4);
+
+          return labProjects
+            .map((project) => {
+              const name = normalizeSearch(project.name);
+              const distance = editDistance(normalizedQuery, name);
+              const contains = name.includes(normalizedQuery) || normalizedQuery.includes(name);
+              return { project, distance, contains };
+            })
+            .filter(({ contains, distance }) => contains || distance <= Math.max(1, Math.floor(normalizedQuery.length / 3)))
+            .sort((left, right) => Number(right.contains) - Number(left.contains) || left.distance - right.distance)
+            .slice(0, 4)
+            .map(({ project }) => project);
+        }
+
         function renderCliResults(query = "", selectedProject = null) {
           if (!cliResults) return;
 
           const normalizedQuery = normalizeSearch(query);
-          const matches = normalizedQuery
-            ? labProjects.filter((project) => normalizeSearch(project.name).includes(normalizedQuery)).slice(0, 4)
-            : selectedProject ? [selectedProject] : [];
+          const matches = getCliMatches(query);
           if (selectedProject && !matches.includes(selectedProject)) matches.unshift(selectedProject);
 
           cliResults.replaceChildren();
@@ -3815,12 +3847,16 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
             return;
           }
 
+          const selectedIndex = selectedProject ? matches.indexOf(selectedProject) : Math.min(cliSelectedIndex, matches.length - 1);
+          cliSelectedIndex = Math.max(0, selectedIndex);
+
           matches.forEach((project, index) => {
             const row = document.createElement("div");
-            row.className = `cli-result${project === selectedProject || index === 0 ? " is-selected" : ""}`;
+            const isSelected = index === cliSelectedIndex;
+            row.className = `cli-result${isSelected ? " is-selected" : ""}`;
             const marker = document.createElement("span");
             marker.className = "cli-result-marker";
-            marker.textContent = project === selectedProject || index === 0 ? "[›]" : "   ";
+            marker.textContent = isSelected ? "[›]" : "   ";
             const name = document.createElement("span");
             name.textContent = project.name;
             const path = document.createElement("span");
@@ -3848,6 +3884,7 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
           clearTerminalNotifications();
           updateTerminalState();
           if (isCli) {
+            cliSelectedIndex = 0;
             renderCliResults(cliInput?.value || "");
             cliInput?.focus({ preventScroll: true });
           } else {
@@ -4218,12 +4255,8 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
           if (sectionTwoAnimationStarted || !humanPhrase || !commandShell) return;
 
           sectionTwoAnimationStarted = true;
-          const scrollWasPaused = Boolean(lenis && !reduceMotion);
-          if (scrollWasPaused) lenis.stop();
-
           const finish = () => {
             startCommandLoop();
-            if (scrollWasPaused) window.setTimeout(() => lenis.start(), 180);
           };
 
           if (!hasGsap) {
@@ -4639,11 +4672,31 @@ const base = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
           tab.addEventListener("click", () => setTerminalMode(tab.dataset.terminalMode));
         });
 
-        cliInput?.addEventListener("input", () => renderCliResults(cliInput.value));
+        cliInput?.addEventListener("input", () => {
+          cliSelectedIndex = 0;
+          renderCliResults(cliInput.value);
+        });
+        cliInput?.addEventListener("keydown", (event) => {
+          const matches = getCliMatches(cliInput.value);
+          if (!matches.length) return;
+
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            cliSelectedIndex = Math.min(cliSelectedIndex + 1, matches.length - 1);
+            renderCliResults(cliInput.value);
+          } else if (event.key === "ArrowUp") {
+            event.preventDefault();
+            cliSelectedIndex = Math.max(cliSelectedIndex - 1, 0);
+            renderCliResults(cliInput.value);
+          } else if (event.key === "Escape") {
+            event.preventDefault();
+            setTerminalMode("wtfis");
+          }
+        });
         cliForm?.addEventListener("submit", (event) => {
           event.preventDefault();
           const typed = cliInput.value.trim();
-          const match = fuzzyProject(typed);
+          const match = getCliMatches(typed)[cliSelectedIndex] || fuzzyProject(typed);
           if (!match) {
             renderCliResults(typed);
             return;

@@ -17,8 +17,6 @@
 
 <p align="center">A local-first terminal finder for getting back to the folder you meant.</p>
 
-<p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
-
 `wtfis` finds folders from a name, path, or typo. `cdd` is the short alias. Pick a match, press Enter, and your shell goes there.
 
 ## See it work
@@ -46,6 +44,8 @@ Use `--up`, `--prev`, and `--recent` when you are tired of retracing your path.
 <img src="public/Deep%20Settings.png" alt="WTFIS settings for configuring directory discovery" width="720" />
 
 Tell WTFIS where to look, how far to look, and what to run after it finds something.
+
+<p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
 
 ## Install
 
@@ -93,6 +93,10 @@ $env:Path += ";$install"
 ```
 
 To load the wrapper in future PowerShell sessions, add `. "$install\shell\wtfis.ps1"` to your `$PROFILE`.
+
+<p align="center">
+  <a href="https://buymeacoffee.com/professorvolodymyr"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&amp;emoji=%E2%98%95&amp;slug=professorvolodymyr&amp;button_colour=D4FF45&amp;font_colour=0B28B6&amp;font_family=Inter&amp;outline_colour=0B28B6&amp;coffee_colour=FFDD00" alt="Buy me a coffee" /></a>
+</p>
 
 ## Use
 
