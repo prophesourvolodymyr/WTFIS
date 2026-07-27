@@ -81,29 +81,59 @@
       }
 
       .loading-mark {
+        position: absolute;
+        inset: 0;
         display: grid;
-        justify-items: center;
-        gap: 0.65rem;
-        font-size: 0.62rem;
-        font-weight: 600;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
+        place-items: center;
+        padding: var(--edge);
+        perspective: 800px;
+        text-align: center;
       }
 
       .loading-mark strong {
+        display: block;
+        max-width: 94vw;
         font-family: "Inter", sans-serif;
-        font-size: clamp(3.25rem, 10vw, 8rem);
+        font-size: clamp(2.35rem, 9vw, 9.4rem);
         font-weight: 900;
-        letter-spacing: -0.1em;
-        line-height: 0.7;
+        letter-spacing: -0.08em;
+        line-height: 0.82;
+        white-space: nowrap;
+        transform-origin: 50% 100%;
       }
 
-      .loading-rule {
-        width: 3.25rem;
-        height: 0.2rem;
-        border-radius: 999px;
-        background: var(--acid);
-        transform-origin: left center;
+      .loading-graph {
+        position: absolute;
+        right: var(--edge);
+        bottom: clamp(1rem, 3vw, 3rem);
+        display: grid;
+        justify-items: end;
+        width: min(42vw, 30rem);
+        gap: 0.35rem;
+      }
+
+      .loading-graph svg {
+        display: block;
+        width: 100%;
+        height: clamp(3.25rem, 7vw, 6rem);
+        overflow: visible;
+      }
+
+      .loading-graph path {
+        fill: none;
+        stroke: var(--acid);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 0.035;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 0.99;
+      }
+
+      .loading-percent {
+        color: var(--acid);
+        font-size: clamp(0.8rem, 1.2vw, 1.1rem);
+        font-weight: 600;
+        letter-spacing: 0.08em;
       }
 
       .scroll-story {
@@ -361,18 +391,42 @@
       }
 
       .company-scroller-viewport {
+        position: relative;
         display: flex;
         align-items: center;
         overflow: hidden;
         width: 100%;
-        height: clamp(4.4rem, 6.4vw, 5.4rem);
-        -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
-        mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+        height: clamp(5.4rem, 7vw, 6.2rem);
+        padding-block: 0.45rem;
+      }
+
+      .company-scroller-viewport::before,
+      .company-scroller-viewport::after {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        bottom: 0;
+        width: clamp(2.5rem, 7vw, 7rem);
+        content: "";
+        pointer-events: none;
+      }
+
+      .company-scroller-viewport::before {
+        left: 0;
+        background: linear-gradient(to right, var(--electric-blue), transparent);
+      }
+
+      .company-scroller-viewport::after {
+        right: 0;
+        background: linear-gradient(to left, var(--electric-blue), transparent);
       }
 
       .company-scroller-track {
+        position: relative;
+        z-index: 1;
         align-items: center;
         display: flex;
+        min-height: 100%;
         width: max-content;
         gap: clamp(1.8rem, 3.2vw, 4rem);
         animation: company-marquee 72s linear infinite;
@@ -388,15 +442,17 @@
         flex: 0 0 auto;
         width: clamp(4.4rem, 6vw, 6.8rem);
         height: clamp(3rem, 4.2vw, 3.8rem);
+        overflow: visible;
         place-items: center;
         opacity: 0.8;
       }
 
       .company-logo img {
         display: block;
-        width: 86%;
-        height: 76%;
-        object-fit: contain;
+        width: auto;
+        height: auto;
+        max-width: 88%;
+        max-height: 78%;
       }
 
       .company-logo--chatgpt img {
@@ -1432,6 +1488,43 @@
         border-bottom: 1px solid rgba(251, 251, 247, 0.16);
       }
 
+      .terminal-mode-tabs {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2rem;
+        margin-left: auto;
+        border: 1px solid rgba(251, 251, 247, 0.2);
+        border-radius: 0.48rem;
+        padding: 0.18rem;
+        background: rgba(4, 20, 115, 0.58);
+      }
+
+      .terminal-mode-tab {
+        min-height: 1.65rem;
+        border: 0;
+        border-radius: 0.28rem;
+        padding: 0.3rem 0.42rem;
+        background: transparent;
+        color: rgba(251, 251, 247, 0.5);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.48rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        transition: background 140ms ease, color 140ms ease;
+      }
+
+      .terminal-mode-tab:hover,
+      .terminal-mode-tab:focus-visible {
+        color: var(--white);
+        outline: none;
+      }
+
+      .terminal-mode-tab[aria-pressed="true"] {
+        background: var(--acid);
+        color: var(--electric-blue-deep);
+      }
+
       .terminal-name {
         color: var(--acid);
         font-size: 0.7rem;
@@ -1552,6 +1645,107 @@
 
       .terminal-input::placeholder {
         color: rgba(251, 251, 247, 0.35);
+      }
+
+      .cli-simulator {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .cli-window {
+        display: grid;
+        width: 100%;
+        min-height: 0;
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+        border: 1px solid rgba(212, 255, 69, 0.8);
+        background: #08176e;
+        color: var(--white);
+        font-size: clamp(0.6rem, 0.78vw, 0.76rem);
+      }
+
+      .cli-titlebar,
+      .cli-guide {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        min-height: 1.8rem;
+        padding: 0.35rem 0.52rem;
+        color: rgba(251, 251, 247, 0.54);
+        font-size: 0.5rem;
+        letter-spacing: 0.03em;
+      }
+
+      .cli-titlebar {
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(212, 255, 69, 0.36);
+      }
+
+      .cli-titlebar strong,
+      .cli-guide b {
+        color: var(--acid);
+        font-weight: 600;
+      }
+
+      .cli-search {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        margin: 0.46rem;
+        border: 1px solid rgba(212, 255, 69, 0.62);
+        padding: 0.2rem 0.38rem;
+      }
+
+      .cli-search input {
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        background: transparent;
+        color: var(--white);
+        caret-color: var(--acid);
+        font: inherit;
+        outline: none;
+      }
+
+      .cli-search input::placeholder { color: rgba(251, 251, 247, 0.32); }
+
+      .cli-results {
+        min-height: 0;
+        overflow: hidden;
+        padding: 0 0.52rem 0.44rem;
+      }
+
+      .cli-empty {
+        margin: 0.15rem 0;
+        color: rgba(251, 251, 247, 0.38);
+      }
+
+      .cli-result {
+        display: grid;
+        grid-template-columns: 1.45rem minmax(0, auto) minmax(0, 1fr);
+        gap: 0.38rem;
+        align-items: baseline;
+        min-height: 1.4rem;
+        color: rgba(251, 251, 247, 0.55);
+        white-space: nowrap;
+      }
+
+      .cli-result.is-selected { color: var(--white); }
+      .cli-result-marker { color: var(--acid); font-weight: 600; }
+      .cli-result-path { overflow: hidden; color: rgba(251, 251, 247, 0.4); text-overflow: ellipsis; }
+
+      .cli-guide {
+        flex-wrap: wrap;
+        border-top: 1px solid rgba(212, 255, 69, 0.26);
+      }
+
+      .terminal-panel.is-cli { cursor: default; }
+
+      @media (max-width: 480px) {
+        .terminal-header { gap: 0.5rem; }
+        .terminal-name { font-size: 0.57rem; white-space: nowrap; }
+        .terminal-mode-tabs { gap: 0.1rem; padding: 0.12rem; }
+        .terminal-mode-tab { min-height: 1.5rem; padding-inline: 0.3rem; font-size: 0.42rem; }
       }
 
       .terminal-enter {
@@ -2515,7 +2709,8 @@
         }
 
         .company-scroller-viewport {
-          height: 2.8rem;
+          height: 3.5rem;
+          padding-block: 0.35rem;
         }
 
         .company-scroller-track {
@@ -2834,9 +3029,13 @@
   <body>
     <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
       <div class="loading-mark">
-        <strong>&gt;WTFIS</strong>
-        <span class="loading-rule" aria-hidden="true"></span>
-        <span>locating directories</span>
+        <strong id="loading-phrase">Fucking Hell.</strong>
+      </div>
+      <div class="loading-graph" aria-hidden="true">
+        <svg viewBox="0 0 1 0.28" preserveAspectRatio="none">
+          <path id="loading-graph-path" pathLength="1" d="M0 .24 .12 .2 .22 .23 .35 .12 .48 .18 .62 .08 .76 .14 .88 .03 1 .09" />
+        </svg>
+        <span class="loading-percent" id="loading-percent">1%</span>
       </div>
     </div>
     <div class="cursor-mask" aria-hidden="true"></div>
@@ -3084,10 +3283,15 @@
               <span>VS</span>
             </div>
 
-            <section class="terminal-panel" aria-label="Test WTFIS shell">
+            <section class="terminal-panel" id="finder-terminal" aria-label="Test WTFIS shell">
               <div class="terminal-header">
                 <span class="terminal-lights" aria-hidden="true"><i></i><i></i><i></i></span>
-                <span class="terminal-name">TERMINAL / WTFIS</span>
+                <span class="terminal-name" id="finder-terminal-name">TERMINAL / WTFIS</span>
+                <div class="terminal-mode-tabs" role="group" aria-label="Terminal mode">
+                  <button class="terminal-mode-tab" type="button" aria-pressed="true" data-terminal-mode="wtfis">WTFIS</button>
+                  <button class="terminal-mode-tab" type="button" aria-pressed="false" data-terminal-mode="cli">CLI</button>
+                  <button class="terminal-mode-tab" type="button" aria-pressed="false" data-terminal-mode="cdd">CDD</button>
+                </div>
               </div>
               <aside class="terminal-notification" id="wtfis-notification" aria-live="polite">
                 <span class="terminal-notification-kicker" id="wtfis-notification-kicker">WTFIS</span>
@@ -3097,9 +3301,19 @@
               <div class="terminal-body">
                 <form class="terminal-form" id="wtfis-form">
                   <label class="terminal-prompt" id="wtfis-prompt" for="wtfis-input">$ wtfis</label>
-                  <input class="terminal-input" id="wtfis-input" type="text" autocomplete="off" spellcheck="false" aria-label="Project name to test with WTFIS" />
+                  <input class="terminal-input" id="wtfis-input" type="text" autocomplete="off" spellcheck="false" aria-label="Project name to test with WTFIS" placeholder="project name" />
                 </form>
                 <div class="terminal-history" id="wtfis-history" aria-live="polite"></div>
+                <div class="cli-simulator" id="cli-simulator" hidden>
+                  <div class="cli-window">
+                    <div class="cli-titlebar"><strong>WTFIS</strong><span>interactive picker</span></div>
+                    <form class="cli-search" id="cli-form">
+                      <input id="cli-input" type="text" autocomplete="off" spellcheck="false" aria-label="Search projects with the WTFIS CLI" placeholder="Fucking Find Something..." />
+                    </form>
+                    <div class="cli-results" id="cli-results" aria-live="polite"></div>
+                    <div class="cli-guide" aria-hidden="true"><b>↑↓</b> move <b>↵</b> open <b>esc</b> cancel <b>/</b> commands</div>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
@@ -3131,7 +3345,7 @@
                 </figure>
                 <figure class="cta-card scroll-stack-card">
                   <div class="cta-shot has-image">
-                    <img class="cta-shot-image" src="/Productivity%20COmmands%20like%20--up%20%26%20etc..png" alt="WTFIS productivity commands for navigating folder history" decoding="async" width="1541" height="1201" />
+                    <img class="cta-shot-image" src="/productivity-commands.png" alt="WTFIS productivity commands for navigating folder history" decoding="async" width="1541" height="1201" />
                   </div>
                     <figcaption><strong>Productivity shortcuts.</strong><span>Use <code>--up</code>, <code>--prev</code>, and <code>--recent</code> instead of retracing your path.</span></figcaption>
                 </figure>
@@ -3158,7 +3372,11 @@
             <div class="install-platforms" id="install-platforms" aria-label="Supported platforms">
               <span aria-label="Apple"><img class="platform-icon" src="https://cdn.simpleicons.org/apple/1f42f3" alt="" loading="lazy" /></span>
               <span aria-label="Linux"><img class="platform-icon" src="https://cdn.simpleicons.org/linux/1f42f3" alt="" loading="lazy" /></span>
-              <span aria-label="Windows"><img class="platform-icon" src="https://cdn.simpleicons.org/windows/1f42f3" alt="" loading="lazy" /></span>
+              <span aria-label="Windows">
+                <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor" d="M2 3.6 10.1 2v9.4H2V3.6Zm9.9-1.9L22 0v11.4h-10.1V1.7ZM2 12.6h8.1V22L2 20.4v-7.8Zm9.9 0H22V24l-10.1-1.7v-9.7Z" />
+                </svg>
+              </span>
             </div>
           </div>
         </aside>
@@ -3196,6 +3414,9 @@
       (() => {
         const cursorMask = document.querySelector(".cursor-mask");
         const loadingScreen = document.querySelector("#loading-screen");
+        const loadingPhrase = document.querySelector("#loading-phrase");
+        const loadingPercent = document.querySelector("#loading-percent");
+        const loadingGraphPath = document.querySelector("#loading-graph-path");
         const topNav = document.querySelector(".top-nav");
         const siteFooter = document.querySelector(".site-footer");
         const videoCard = document.querySelector("#video-card");
@@ -3239,9 +3460,16 @@
           const cdNotification = document.querySelector("#cd-notification");
           const wtfisForm = document.querySelector("#wtfis-form");
           const wtfisInput = document.querySelector("#wtfis-input");
-          const wtfisHistory = document.querySelector("#wtfis-history");
-          const wtfisPrompt = document.querySelector("#wtfis-prompt");
-          const wtfisNotification = document.querySelector("#wtfis-notification");
+        const wtfisHistory = document.querySelector("#wtfis-history");
+        const wtfisPrompt = document.querySelector("#wtfis-prompt");
+        const wtfisNotification = document.querySelector("#wtfis-notification");
+        const finderTerminal = document.querySelector("#finder-terminal");
+        const finderTerminalName = document.querySelector("#finder-terminal-name");
+        const terminalModeTabs = [...document.querySelectorAll("[data-terminal-mode]")];
+        const cliSimulator = document.querySelector("#cli-simulator");
+        const cliForm = document.querySelector("#cli-form");
+        const cliInput = document.querySelector("#cli-input");
+        const cliResults = document.querySelector("#cli-results");
           const labToast = document.querySelector("#lab-toast");
           const progressSteps = [...document.querySelectorAll(".progress-step")];
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -3269,9 +3497,10 @@
          let playgroundVisible = false;
           let currentDirectory = projectRoot;
          let previousDirectory = currentDirectory;
-          let cdWasteSeconds = 0;
-          let cdWrongTurns = 0;
-          let cdEntryWasPasted = false;
+        let cdWasteSeconds = 0;
+        let cdWrongTurns = 0;
+        let cdEntryWasPasted = false;
+        let terminalMode = "wtfis";
            const notificationTimers = new WeakMap();
           let morphOpenWidthPx = 0;
           let morphPhraseFit = 1;
@@ -3555,9 +3784,71 @@
           return `% ${command}`;
         }
 
+        function finderCommand() {
+          return terminalMode === "cdd" ? "cdd" : "wtfis";
+        }
+
         function updateTerminalState() {
           if (cdPrompt) cdPrompt.textContent = terminalPrompt(currentDirectory, "cd");
-          if (wtfisPrompt) wtfisPrompt.textContent = terminalPrompt(currentDirectory, "wtfis");
+          if (wtfisPrompt) wtfisPrompt.textContent = terminalPrompt(currentDirectory, finderCommand());
+        }
+
+        function renderCliResults(query = "", selectedProject = null) {
+          if (!cliResults) return;
+
+          const normalizedQuery = normalizeSearch(query);
+          const matches = normalizedQuery
+            ? labProjects.filter((project) => normalizeSearch(project.name).includes(normalizedQuery)).slice(0, 4)
+            : selectedProject ? [selectedProject] : [];
+          if (selectedProject && !matches.includes(selectedProject)) matches.unshift(selectedProject);
+
+          cliResults.replaceChildren();
+          if (!matches.length) {
+            const empty = document.createElement("p");
+            empty.className = "cli-empty";
+            empty.textContent = normalizedQuery ? "No matching folders" : "Your recent projects will appear here";
+            cliResults.appendChild(empty);
+            return;
+          }
+
+          matches.forEach((project, index) => {
+            const row = document.createElement("div");
+            row.className = `cli-result${project === selectedProject || index === 0 ? " is-selected" : ""}`;
+            const marker = document.createElement("span");
+            marker.className = "cli-result-marker";
+            marker.textContent = project === selectedProject || index === 0 ? "[›]" : "   ";
+            const name = document.createElement("span");
+            name.textContent = project.name;
+            const path = document.createElement("span");
+            path.className = "cli-result-path";
+            path.textContent = project.path;
+            row.append(marker, name, path);
+            cliResults.appendChild(row);
+          });
+        }
+
+        function setTerminalMode(nextMode) {
+          if (!["wtfis", "cli", "cdd"].includes(nextMode)) return;
+
+          terminalMode = nextMode;
+          const isCli = nextMode === "cli";
+          const command = finderCommand();
+          finderTerminal?.classList.toggle("is-cli", isCli);
+          finderTerminal?.setAttribute("aria-label", isCli ? "WTFIS interactive CLI" : `Test ${command} shell`);
+          if (finderTerminalName) finderTerminalName.textContent = `TERMINAL / ${isCli ? "WTFIS CLI" : command.toUpperCase()}`;
+          terminalModeTabs.forEach((tab) => tab.setAttribute("aria-pressed", String(tab.dataset.terminalMode === nextMode)));
+          if (wtfisForm) wtfisForm.hidden = isCli;
+          if (wtfisHistory) wtfisHistory.hidden = isCli;
+          if (cliSimulator) cliSimulator.hidden = !isCli;
+          if (wtfisInput) wtfisInput.setAttribute("aria-label", `Project name to test with ${command.toUpperCase()}`);
+          clearTerminalNotifications();
+          updateTerminalState();
+          if (isCli) {
+            renderCliResults(cliInput?.value || "");
+            cliInput?.focus({ preventScroll: true });
+          } else {
+            wtfisInput?.focus({ preventScroll: true });
+          }
         }
 
         function formatDuration(seconds) {
@@ -3620,7 +3911,7 @@
           }
 
           if (mode === "wtfis-error") {
-            setTerminalNotification(wtfisNotification, "WTFIS", "No match", "cwd unchanged", "error");
+            setTerminalNotification(wtfisNotification, finderCommand().toUpperCase(), "No match", "cwd unchanged", "error");
             return;
           }
 
@@ -3805,11 +4096,13 @@
           closeProjectPopup();
           cdInput.value = "";
           wtfisInput.value = "";
+          if (cliInput) cliInput.value = "";
           cdHistory?.replaceChildren();
           wtfisHistory?.replaceChildren();
           updateTerminalState();
           updateOutcome("default");
           renderFilesystem();
+          renderCliResults();
           if (!silent) showToast(`Generated ${generatedProject.name}.`);
 
           if (reopen) {
@@ -3921,8 +4214,12 @@
           if (sectionTwoAnimationStarted || !humanPhrase || !commandShell) return;
 
           sectionTwoAnimationStarted = true;
+          const scrollWasPaused = Boolean(lenis && !reduceMotion);
+          if (scrollWasPaused) lenis.stop();
+
           const finish = () => {
             startCommandLoop();
+            if (scrollWasPaused) window.setTimeout(() => lenis.start(), 180);
           };
 
           if (!hasGsap) {
@@ -3974,7 +4271,7 @@
           const state = { value: start };
           autoScrollTween = gsap.to(state, {
             value: target,
-            duration: Math.min(15, Math.max(8, distance / 600)),
+            duration: Math.min(1.35, Math.max(0.55, distance / 2200)),
             ease: "power2.inOut",
             overwrite: true,
             onUpdate: () => setScrollPosition(state.value),
@@ -4136,9 +4433,10 @@
               const curtainOut = clamp((progress - 0.28) / 0.3, 0, 1);
               const curtainY = curtainIn < 1 ? 108 - curtainIn * 108 : curtainOut * 88;
               const heroOut = clamp((progress - 0.24) / 0.2, 0, 1);
-              const titleIn = clamp((progress - 0.46) / 0.18, 0, 1);
+               const titleIn = clamp((progress - 0.4) / 0.08, 0, 1);
               setVideoVisibility(progress < 0.24);
 
+              unifiedGrid.style.transform = `translate3d(0, ${progress * -14}%, 0) scale(${1 + progress * 0.05})`;
               whiteCurtain.style.transform = `translate3d(0, ${curtainY}%, 0)`;
               heroShell.style.opacity = String(1 - heroOut);
               heroShell.style.transform = `translate3d(0, ${heroOut * -8}%, 0) scale(${1 - heroOut * 0.06})`;
@@ -4177,9 +4475,7 @@
             },
           });
 
-          if (finePointer) {
-            sceneTimeline.to(unifiedGrid, { yPercent: -14, scale: 1.05, duration: 1, ease: "none" }, 0);
-          }
+          sceneTimeline.to(unifiedGrid, { yPercent: -14, scale: 1.05, duration: 1, ease: "none" }, 0);
 
           sceneTimeline
             .to(
@@ -4204,10 +4500,11 @@
               0.24,
             )
             .to(whiteCurtain, { yPercent: 0, duration: 0.3, ease: "power3.inOut" }, 0.08)
-            .set(whatSection, { autoAlpha: 1 }, 0.38)
-            .to(previousSectionShadow, { autoAlpha: 0.12, yPercent: 0, scale: 1.04, duration: 0.3, ease: "power2.out" }, 0.4)
-             .to(whiteCurtain, { yPercent: 88, duration: 0.34, ease: "power3.inOut" }, 0.4)
-             .to(whatTitle, { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.28, ease: "power2.out" }, 0.49);
+             .set(whatSection, { autoAlpha: 1 }, 0.38)
+             .to(previousSectionShadow, { autoAlpha: 0.12, yPercent: 0, scale: 1.04, duration: 0.3, ease: "power2.out" }, 0.4)
+              .to(whiteCurtain, { yPercent: 88, duration: 0.34, ease: "power3.inOut" }, 0.4)
+              .set(whatTitle, { autoAlpha: 1 }, 0.4)
+              .to(whatTitle, { yPercent: 0, scale: 1, duration: 0.28, ease: "power2.out" }, 0.4);
         }
 
         function runIntro() {
@@ -4269,12 +4566,41 @@
             return;
           }
 
+          const phrases = ["Fucking Hell.", "Fuck This", "What The Fuck", "Fuck Yeah", "Fuck Loading.", "Fuck Error"];
+          const progress = { value: 1 };
+          let previousPhrase = "";
+          try {
+            previousPhrase = window.sessionStorage.getItem("wtfis-loader-phrase") || "";
+          } catch {}
+
+          const updatePhrase = () => {
+            if (!loadingPhrase) return;
+            const choices = phrases.filter((phrase) => phrase !== previousPhrase);
+            const nextPhrase = choices[Math.floor(Math.random() * choices.length)];
+            try {
+              window.sessionStorage.setItem("wtfis-loader-phrase", nextPhrase);
+            } catch {}
+            loadingPhrase.textContent = nextPhrase;
+            gsap.killTweensOf(loadingPhrase);
+            gsap.fromTo(
+              loadingPhrase,
+              { y: 42, autoAlpha: 0, scale: 0.82, rotateX: -48, filter: "blur(6px)" },
+              { y: 0, autoAlpha: 1, scale: 1, rotateX: 0, filter: "blur(0px)", duration: 0.24, ease: "back.out(1.4)" },
+            );
+          };
+
+          const updateProgress = () => {
+            const value = Math.min(100, Math.max(1, Math.round(progress.value)));
+            if (loadingPercent) loadingPercent.textContent = `${value}%`;
+            if (loadingGraphPath) loadingGraphPath.style.strokeDashoffset = String(1 - value / 100);
+          };
+
+          updatePhrase();
+          updateProgress();
           gsap
             .timeline({ defaults: { ease: "power3.out" } })
-            .fromTo(".loading-mark strong", { y: 28, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.46 })
-            .fromTo(".loading-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.42 }, "-=0.1")
-            .fromTo(".loading-mark > span:last-child", { y: 8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.3 }, "-=0.16")
-            .to(".loading-screen", { yPercent: -100, duration: 0.62, delay: 0.3, ease: "power4.inOut" })
+            .to(progress, { value: 100, duration: 1.3, ease: "power1.inOut", onUpdate: updateProgress })
+            .to(".loading-screen", { yPercent: -100, duration: 0.32, delay: 0.05, ease: "power4.inOut" })
             .call(finish);
         }
 
@@ -4298,11 +4624,33 @@
         });
 
         terminalPanels.forEach((panel) => {
-          const input = panel.querySelector(".terminal-input");
           panel.addEventListener("click", (event) => {
             if (event.target.closest?.("input, button, a, textarea, select")) return;
+            const input = panel === finderTerminal && terminalMode === "cli" ? cliInput : panel.querySelector(".terminal-input");
             input?.focus({ preventScroll: true });
           });
+        });
+
+        terminalModeTabs.forEach((tab) => {
+          tab.addEventListener("click", () => setTerminalMode(tab.dataset.terminalMode));
+        });
+
+        cliInput?.addEventListener("input", () => renderCliResults(cliInput.value));
+        cliForm?.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const typed = cliInput.value.trim();
+          const match = fuzzyProject(typed);
+          if (!match) {
+            renderCliResults(typed);
+            return;
+          }
+
+          previousDirectory = currentDirectory;
+          currentDirectory = match.path;
+          updateTerminalState();
+          renderCliResults(typed, match);
+          markProgress("wtfis");
+          showToast(`${match.name} selected.`);
         });
 
         finderRegenerate?.addEventListener("click", () => generateFilesystem());
@@ -4356,8 +4704,9 @@
 
         wtfisForm?.addEventListener("submit", (event) => {
           event.preventDefault();
-          const typed = wtfisInput.value.trim().replace(/^wtfis\s+/i, "");
-          appendHistory(wtfisHistory, "history-command", terminalPrompt(currentDirectory, `wtfis ${typed || "…"}`));
+          const command = finderCommand();
+          const typed = wtfisInput.value.trim().replace(new RegExp(`^${command}\\s+`, "i"), "");
+          appendHistory(wtfisHistory, "history-command", terminalPrompt(currentDirectory, `${command} ${typed || "…"}`));
           const match = fuzzyProject(typed);
 
           if (match) {
@@ -4368,7 +4717,7 @@
             updateOutcome("saved", match, { savedSeconds });
             markProgress("wtfis");
           } else {
-            appendHistory(wtfisHistory, "history-error", `wtfis: no project matched “${typed || "empty"}”`);
+            appendHistory(wtfisHistory, "history-error", `${command}: no project matched “${typed || "empty"}”`);
             updateOutcome("wtfis-error");
           }
 
