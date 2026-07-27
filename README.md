@@ -19,6 +19,8 @@ cat "$(brew --prefix)/share/wtfis/wtfis.zsh" >> ~/.zshrc
 
 Restart your shell. For Bash, use `wtfis.bash` instead.
 
+For PowerShell on Windows, dot-source `shell/wtfis.ps1` from your PowerShell profile.
+
 ## Use
 
 ```bash
@@ -49,6 +51,8 @@ Launching `wtfis` with no query does not scan the filesystem. It opens immediate
 Type `/` in the selector to browse command presets. Use `/add` to choose a project and attach a preset or custom command, `/exit` to cancel, or `/opencode` and similar commands to enter the project and run the command immediately. Configure presets with `wtfis --set`.
 
 The inline guide from `wtfis --help` documents every available command and control. Inside the finder, use Up/Down and Enter to navigate, Escape to cancel, or click results with the mouse. Trackpad/mouse-wheel scrolling is intentionally ignored inside the inline UI. A unique confident fuzzy match opens directly; ambiguous matches stay in the selector.
+
+The Rust core is cross-platform. Linux uses Bash/Zsh integration, while Windows uses the PowerShell wrapper to change the parent shell directory.
 
 The configuration also supports `exact_depth` as a maximum directory depth, for example `roots = ["/Users/you/GSpace"]` with `exact_depth = 3` searches the root's first, second, and third layers. Shallower matches rank first, while exact names at deeper layers still match directly.
 

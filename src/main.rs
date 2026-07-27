@@ -94,6 +94,7 @@ const HELP_TEXT: &[&str] = &[
     "",
     "SHELL INTEGRATION",
     "  Source shell/wtfis.zsh, shell/wtfis.bash, or shell/wtfis.ps1.",
+    "  In PowerShell, dot-source wtfis.ps1 to enable parent-shell cd.",
     "  The wrapper changes the parent shell directory after selection.",
     "  Homebrew installs Unix wrappers; Windows uses the PowerShell wrapper.",
     "  Without the wrapper, WTFIS can print paths but cannot change your shell.",
