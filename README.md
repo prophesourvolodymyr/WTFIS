@@ -55,7 +55,7 @@ Tell WTFIS where to look, how far to look, and what to run after it finds someth
 
 ## Install
 
-### <img src="https://cdn.simpleicons.org/apple/000000" alt="Apple" width="18" height="18" /> macOS
+### <img src="./public/platform-apple.svg" alt="Apple" width="18" height="18" /> macOS
 
 **Homebrew**
 
@@ -75,7 +75,7 @@ source ~/.bashrc
 
 **Manual:** download `wtfis-macos-arm64.tar.gz` from [Releases](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest).
 
-### <img src="https://cdn.simpleicons.org/linux/FCC624" alt="Linux" width="18" height="18" /> Linux
+### <img src="./public/platform-linux.svg" alt="Linux" width="18" height="18" /> Linux
 
 **Homebrew**
 
@@ -103,7 +103,7 @@ yay -S wtfis-cli
 
 **Manual:** download `wtfis-linux-x86_64.tar.gz` from [Releases](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest).
 
-### <img src="https://cdn.simpleicons.org/windows/0078D4" alt="Windows" width="18" height="18" /> Windows
+### <img src="./public/platform-windows.svg" alt="Windows" width="18" height="18" /> Windows
 
 **Scoop**
 
