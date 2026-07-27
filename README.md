@@ -55,48 +55,29 @@ Tell WTFIS where to look, how far to look, and what to run after it finds someth
 
 ## Install
 
-Choose the installation method for your platform. Every method installs the same WTFIS CLI and requires shell integration for automatic directory changes.
-
 ### 🍎 macOS
 
-#### Homebrew (recommended)
-
-Homebrew installs the binary and shell wrappers. Source the wrapper once so WTFIS can change your current shell directory.
+**Homebrew**
 
 ```bash
 brew tap prophesourvolodymyr/wtfis
 brew install wtfis
-
-# Zsh
 cat "$(brew --prefix)/share/wtfis/wtfis.zsh" >> ~/.zshrc
 source ~/.zshrc
 ```
 
-For Bash, add this to `~/.bashrc` instead:
+For Bash:
 
 ```bash
 echo 'source "$(brew --prefix)/share/wtfis/wtfis.bash"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-#### GitHub Release (manual)
-
-Download `wtfis-macos-arm64.tar.gz` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest), then install the binary and wrapper:
-
-```bash
-tar -xzf wtfis-macos-arm64.tar.gz
-mkdir -p ~/.local/bin ~/.local/share/wtfis
-install -m 755 wtfis-macos-arm64/wtfis wtfis-macos-arm64/cdd ~/.local/bin/
-cp -R wtfis-macos-arm64/shell ~/.local/share/wtfis
-echo 'source "$HOME/.local/share/wtfis/wtfis.zsh"' >> ~/.zshrc
-source ~/.zshrc
-```
+**Manual:** download `wtfis-macos-arm64.tar.gz` from [Releases](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest).
 
 ### 🐧 Linux
 
-#### Homebrew on Linux
-
-If Homebrew is already installed, use the same tap as macOS:
+**Homebrew**
 
 ```bash
 brew tap prophesourvolodymyr/wtfis
@@ -105,67 +86,40 @@ echo 'source "$(brew --prefix)/share/wtfis/wtfis.bash"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-For Zsh, source `$(brew --prefix)/share/wtfis/wtfis.zsh` from `~/.zshrc` instead.
+For Zsh:
 
-#### Arch Linux (AUR)
+```bash
+echo 'source "$(brew --prefix)/share/wtfis/wtfis.zsh"' >> ~/.zshrc
+source ~/.zshrc
+```
 
-The Arch package is named `wtfis-cli` because `wtfis` is already used by an unrelated package. The PKGBUILD is ready in `packaging/aur/`; AUR publication is pending maintainer SSH authentication.
+**Arch Linux / AUR**
 
-Once published, install it with:
+Package name: `wtfis-cli` (AUR publication pending).
 
 ```bash
 yay -S wtfis-cli
 ```
 
-#### GitHub Release (manual)
-
-Download `wtfis-linux-x86_64.tar.gz` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest):
-
-```bash
-tar -xzf wtfis-linux-x86_64.tar.gz
-mkdir -p ~/.local/bin ~/.local/share/wtfis
-install -m 755 wtfis-linux-x86_64/wtfis wtfis-linux-x86_64/cdd ~/.local/bin/
-cp -R wtfis-linux-x86_64/shell ~/.local/share/wtfis
-
-# Bash
-echo 'source "$HOME/.local/share/wtfis/wtfis.bash"' >> ~/.bashrc
-source ~/.bashrc
-```
-
-For Zsh, source `~/.local/share/wtfis/wtfis.zsh` from `~/.zshrc` instead.
+**Manual:** download `wtfis-linux-x86_64.tar.gz` from [Releases](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest).
 
 ### 🪟 Windows
 
-#### Scoop (recommended)
-
-Scoop uses the public WTFIS bucket and installs the Windows release archive without administrator access.
+**Scoop**
 
 ```powershell
 scoop bucket add wtfis https://github.com/prophesourvolodymyr/homebrew-wtfis
 scoop install wtfis
-
-$install = "$env:USERPROFILE\scoop\apps\wtfis\current"
-. "$install\shell\wtfis.ps1"
+. "$env:USERPROFILE\scoop\apps\wtfis\current\shell\wtfis.ps1"
 ```
 
-To load the PowerShell wrapper in future sessions:
+For future sessions:
 
 ```powershell
 Add-Content $PROFILE '. "$env:USERPROFILE\scoop\apps\wtfis\current\shell\wtfis.ps1"'
 ```
 
-#### GitHub Release (manual)
-
-Download `wtfis-windows-x86_64.zip` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest), then run:
-
-```powershell
-Expand-Archive .\wtfis-windows-x86_64.zip -DestinationPath $env:LOCALAPPDATA\WTFIS -Force
-$install = "$env:LOCALAPPDATA\WTFIS\wtfis-windows-x86_64"
-$env:Path += ";$install"
-. "$install\shell\wtfis.ps1"
-```
-
-To load the wrapper in future PowerShell sessions, add `. "$install\shell\wtfis.ps1"` to your `$PROFILE`.
+**Manual:** download `wtfis-windows-x86_64.zip` from [Releases](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest).
 
 <p align="center">
   <a href="https://buymeacoffee.com/professorvolodymyr"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&amp;emoji=%E2%98%95&amp;slug=professorvolodymyr&amp;button_colour=D4FF45&amp;font_colour=0B28B6&amp;font_family=Inter&amp;outline_colour=0B28B6&amp;coffee_colour=FFDD00" alt="Buy me a coffee" /></a>
