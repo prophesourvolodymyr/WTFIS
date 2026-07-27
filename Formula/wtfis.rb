@@ -1,8 +1,8 @@
 class Wtfis < Formula
   desc "Find projects fast from your terminal"
   homepage "https://github.com/prophesourvolodymyr/WTFIS-CLI"
-  url "https://github.com/prophesourvolodymyr/WTFIS-CLI/archive/refs/tags/v1.0.2.tar.gz"
-  version "1.0.2"
+  url "https://github.com/prophesourvolodymyr/WTFIS-CLI/archive/refs/tags/v1.0.3.tar.gz"
+  version "1.0.3"
   license "WTFPL"
 
   depends_on "rust" => :build

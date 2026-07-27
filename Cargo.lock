@@ -913,7 +913,7 @@ dependencies = [
 
 [[package]]
 name = "wtfis"
-version = "1.0.2"
+version = "1.0.3"
 dependencies = [
  "crossterm 0.29.0",
  "dirs",

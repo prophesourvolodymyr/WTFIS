@@ -32,7 +32,9 @@ const MAX_RECENTS: usize = 5;
 const COFFEE_URL: &str = "https://buymeacoffee.com/professorvolodymyr";
 const COFFEE_TEST_MODE: bool = false;
 const DEFAULT_MARKER: &str = "chevron";
-const ACCENT_NAMES: [&str; 7] = ["cyan", "magenta", "yellow", "green", "blue", "red", "white"];
+const ACCENT_NAMES: [&str; 8] = [
+    "system", "cyan", "magenta", "yellow", "green", "blue", "red", "white",
+];
 const MARKER_NAMES: [&str; 6] = ["chevron", "sparkle", "diamond", "pulse", "ring", "ascii"];
 const HELP_TEXT: &[&str] = &[
     "WTFIS",
@@ -362,7 +364,7 @@ fn show_first_run_intro() -> Result<(), Box<dyn std::error::Error>> {
 
 fn render_first_run_intro(frame: &mut ratatui::Frame<'_>) {
     let area = frame.area();
-    let accent = Color::Magenta;
+    let accent = accent_color(None);
     let block = Block::default()
         .borders(Borders::ALL)
         .border_style(Style::default().fg(accent))
@@ -374,7 +376,7 @@ fn render_first_run_intro(frame: &mut ratatui::Frame<'_>) {
         Line::from(Span::styled(
             "Where the fuck is your project?",
             Style::default()
-                .fg(Color::White)
+                .fg(system_text_color(Color::White))
                 .add_modifier(Modifier::BOLD),
         )),
         Line::from(""),
@@ -389,13 +391,13 @@ fn render_first_run_intro(frame: &mut ratatui::Frame<'_>) {
         Line::from(""),
         Line::from(Span::styled(
             "Enter / Space / click to continue",
-            Style::default().fg(Color::DarkGray),
+            Style::default().fg(system_text_color(Color::DarkGray)),
         )),
     ];
     frame.render_widget(
         Paragraph::new(lines)
             .alignment(Alignment::Center)
-            .style(Style::default().fg(Color::Gray)),
+            .style(Style::default().fg(system_text_color(Color::Gray))),
         inner,
     );
 }
@@ -520,14 +522,51 @@ fn default_global_roots() -> Vec<PathBuf> {
 }
 
 fn accent_color(name: Option<&str>) -> Color {
-    match name.unwrap_or("cyan") {
+    match name.unwrap_or(default_accent_name()) {
+        "system" => Color::Reset,
         "magenta" => Color::Magenta,
         "yellow" => Color::Yellow,
         "green" => Color::Green,
         "blue" => Color::Blue,
         "red" => Color::Red,
         "white" => Color::White,
-        _ => Color::Cyan,
+        _ => default_accent_color(),
+    }
+}
+
+fn default_accent_name() -> &'static str {
+    #[cfg(target_os = "linux")]
+    {
+        "system"
+    }
+    #[cfg(not(target_os = "linux"))]
+    {
+        "cyan"
+    }
+}
+
+fn default_accent_color() -> Color {
+    #[cfg(target_os = "linux")]
+    {
+        Color::Reset
+    }
+    #[cfg(not(target_os = "linux"))]
+    {
+        Color::Cyan
+    }
+}
+
+fn system_text_color(color: Color) -> Color {
+    #[cfg(target_os = "linux")]
+    {
+        match color {
+            Color::White | Color::Gray | Color::DarkGray => Color::Reset,
+            color => color,
+        }
+    }
+    #[cfg(not(target_os = "linux"))]
+    {
+        color
     }
 }
 
@@ -885,14 +924,14 @@ fn show_help() -> Result<(), Box<dyn std::error::Error>> {
     let height = terminal::size()
         .map(|(_, rows)| rows.clamp(7, 24))
         .unwrap_or(16);
-    let lines = help_lines(accent_color(Some("cyan")));
+    let lines = help_lines(accent_color(None));
     let visible = height.saturating_sub(2) as usize;
     let mut scroll = 0usize;
     let mut session = UiSession::new(height)?;
 
     loop {
         session.terminal.draw(|frame| {
-            render_help(frame, &lines, scroll, accent_color(Some("cyan")));
+            render_help(frame, &lines, scroll, accent_color(None));
         })?;
 
         if !event::poll(Duration::from_millis(100))? {
@@ -942,7 +981,7 @@ fn help_lines(accent: Color) -> Vec<Line<'static>> {
             } else if text.is_empty() {
                 Style::default()
             } else {
-                Style::default().fg(Color::Gray)
+                Style::default().fg(system_text_color(Color::Gray))
             };
             Line::from(Span::styled(*text, style))
         })
@@ -1485,12 +1524,18 @@ fn render_help(
             "↑↓",
             Style::default().fg(accent).add_modifier(Modifier::BOLD),
         ),
-        Span::styled(" scroll  ", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            " scroll  ",
+            Style::default().fg(system_text_color(Color::DarkGray)),
+        ),
         Span::styled(
             "q",
             Style::default().fg(accent).add_modifier(Modifier::BOLD),
         ),
-        Span::styled(" close", Style::default().fg(Color::DarkGray)),
+        Span::styled(
+            " close",
+            Style::default().fg(system_text_color(Color::DarkGray)),
+        ),
     ]);
     let block = Block::default()
         .borders(Borders::ALL)
@@ -1503,7 +1548,7 @@ fn render_help(
     frame.render_widget(
         Paragraph::new(lines.to_vec())
             .scroll((scroll.min(lines.len()) as u16, 0))
-            .style(Style::default().fg(Color::Gray)),
+            .style(Style::default().fg(system_text_color(Color::Gray))),
         inner,
     );
 }
@@ -1557,7 +1602,7 @@ fn render_frame(
 ) -> Rect {
     let area = frame.area();
     let guide_icon = Style::default().fg(accent).add_modifier(Modifier::BOLD);
-    let guide_text = Style::default().fg(Color::DarkGray);
+    let guide_text = Style::default().fg(system_text_color(Color::DarkGray));
     let mut guide_spans = vec![
         Span::raw(" "),
         Span::styled("↑↓", guide_icon),
@@ -1575,7 +1620,7 @@ fn render_frame(
             guide_spans.push(Span::styled(
                 path.file_name().unwrap_or_default().to_string_lossy(),
                 Style::default()
-                    .fg(Color::White)
+                    .fg(system_text_color(Color::White))
                     .add_modifier(Modifier::BOLD),
             ));
         }
@@ -1605,13 +1650,13 @@ fn render_frame(
     let input = if query.is_empty() {
         Line::from(Span::styled(
             "Fucking Find Something...",
-            Style::default().fg(Color::DarkGray),
+            Style::default().fg(system_text_color(Color::DarkGray)),
         ))
     } else {
         Line::from(Span::styled(
             query,
             Style::default()
-                .fg(Color::White)
+                .fg(system_text_color(Color::White))
                 .add_modifier(Modifier::BOLD),
         ))
     };
@@ -1636,7 +1681,8 @@ fn render_frame(
                 "No command matches"
             };
             frame.render_widget(
-                Paragraph::new(message).style(Style::default().fg(Color::DarkGray)),
+                Paragraph::new(message)
+                    .style(Style::default().fg(system_text_color(Color::DarkGray))),
                 sections[1],
             );
         } else {
@@ -1650,14 +1696,14 @@ fn render_frame(
                     let marker_style = if selected_style {
                         Style::default().fg(accent).add_modifier(Modifier::BOLD)
                     } else {
-                        Style::default().fg(Color::DarkGray)
+                        Style::default().fg(system_text_color(Color::DarkGray))
                     };
                     let label_style = if selected_style {
                         Style::default()
-                            .fg(Color::White)
+                            .fg(system_text_color(Color::White))
                             .add_modifier(Modifier::BOLD)
                     } else {
-                        Style::default().fg(Color::Gray)
+                        Style::default().fg(system_text_color(Color::Gray))
                     };
                     ListItem::new(Line::from(vec![
                         Span::styled(
@@ -1688,17 +1734,20 @@ fn render_frame(
                     frames[finding_frame % frames.len()],
                     Style::default().fg(accent).add_modifier(Modifier::BOLD),
                 ),
-                Span::styled(" Finding your project...", Style::default().fg(Color::Gray)),
+                Span::styled(
+                    " Finding your project...",
+                    Style::default().fg(system_text_color(Color::Gray)),
+                ),
             ])
         } else if query.is_empty() {
             Line::from(Span::styled(
                 "Your recent projects will appear here",
-                Style::default().fg(Color::DarkGray),
+                Style::default().fg(system_text_color(Color::DarkGray)),
             ))
         } else {
             Line::from(Span::styled(
                 "No matching folders",
-                Style::default().fg(Color::DarkGray),
+                Style::default().fg(system_text_color(Color::DarkGray)),
             ))
         };
         frame.render_widget(Paragraph::new(message), sections[1]);
@@ -1718,16 +1767,16 @@ fn render_frame(
                 let marker_style = if selected_style {
                     Style::default().fg(accent).add_modifier(Modifier::BOLD)
                 } else {
-                    Style::default().fg(Color::DarkGray)
+                    Style::default().fg(system_text_color(Color::DarkGray))
                 };
                 let name_style = if selected_style {
                     Style::default()
-                        .fg(Color::White)
+                        .fg(system_text_color(Color::White))
                         .add_modifier(Modifier::BOLD)
                 } else {
-                    Style::default().fg(Color::Gray)
+                    Style::default().fg(system_text_color(Color::Gray))
                 };
-                let path_style = Style::default().fg(Color::DarkGray);
+                let path_style = Style::default().fg(system_text_color(Color::DarkGray));
                 ListItem::new(Line::from(vec![
                     Span::styled(marker, marker_style),
                     Span::styled(name, name_style),
@@ -2292,7 +2341,11 @@ fn adjust_settings(state: &mut SettingsState, delta: i8) {
             state.config.exact_depth = options[cycle_index(current, options.len(), delta)];
         }
         row if row == settings_accent_row(state) => {
-            let current = state.config.accent.as_deref().unwrap_or("cyan");
+            let current = state
+                .config
+                .accent
+                .as_deref()
+                .unwrap_or(default_accent_name());
             let index = ACCENT_NAMES
                 .iter()
                 .position(|name| *name == current)
@@ -2435,7 +2488,7 @@ fn render_settings(frame: &mut ratatui::Frame<'_>, state: &SettingsState, wizard
         return Rect::default();
     }
     let icon_style = Style::default().fg(accent).add_modifier(Modifier::BOLD);
-    let text_style = Style::default().fg(Color::DarkGray);
+    let text_style = Style::default().fg(system_text_color(Color::DarkGray));
     let guides = Line::from(vec![
         Span::raw(" "),
         Span::styled("↑↓", icon_style),
@@ -2505,12 +2558,12 @@ fn render_settings(frame: &mut ratatui::Frame<'_>, state: &SettingsState, wizard
         let line = if state.path_input.is_empty() {
             Line::from(Span::styled(
                 input_placeholder,
-                Style::default().fg(Color::DarkGray),
+                Style::default().fg(system_text_color(Color::DarkGray)),
             ))
         } else {
             Line::from(Span::styled(
                 state.path_input.as_str(),
-                Style::default().fg(Color::White),
+                Style::default().fg(system_text_color(Color::White)),
             ))
         };
         let cursor_x = input_inner
@@ -2542,19 +2595,19 @@ fn render_settings(frame: &mut ratatui::Frame<'_>, state: &SettingsState, wizard
             let marker_style = if selected {
                 Style::default().fg(accent).add_modifier(Modifier::BOLD)
             } else {
-                Style::default().fg(Color::DarkGray)
+                Style::default().fg(system_text_color(Color::DarkGray))
             };
             let label_style = if selected {
                 Style::default()
-                    .fg(Color::White)
+                    .fg(system_text_color(Color::White))
                     .add_modifier(Modifier::BOLD)
             } else {
-                Style::default().fg(Color::Gray)
+                Style::default().fg(system_text_color(Color::Gray))
             };
             let value_style = if selected {
                 Style::default().fg(accent).add_modifier(Modifier::BOLD)
             } else {
-                Style::default().fg(Color::DarkGray)
+                Style::default().fg(system_text_color(Color::DarkGray))
             };
             let (label, value): (&str, String) = if row == SETTINGS_GLOBAL_ROW {
                 (
@@ -2597,7 +2650,12 @@ fn render_settings(frame: &mut ratatui::Frame<'_>, state: &SettingsState, wizard
             } else if row == settings_accent_row(state) {
                 (
                     "Accent color",
-                    state.config.accent.as_deref().unwrap_or("cyan").to_string(),
+                    state
+                        .config
+                        .accent
+                        .as_deref()
+                        .unwrap_or(default_accent_name())
+                        .to_string(),
                 )
             } else if row == settings_marker_row(state) {
                 (
