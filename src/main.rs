@@ -236,6 +236,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     } else {
         args.join(" ")
     };
+    if !recover_cd {
+        let (local_query, _) = split_command_input(&query);
+        if let Ok(current) = env::current_dir() {
+            if let Some(path) = exact_local_match(&current, &local_query) {
+                remember(&mut config, path.clone())?;
+                emit_selection_or_easter_egg(Selection {
+                    command: project_command(&config, &path),
+                    path,
+                })?;
+                return Ok(());
+            }
+        }
+    }
     let (roots, exact_depth) = if recover_cd {
         (default_global_roots(), None)
     } else {
@@ -695,6 +708,15 @@ fn ignored_directory(path: &Path, scan_hidden: bool) -> bool {
             name.as_ref(),
             "Library" | "Applications" | "Movies" | "Music" | "Pictures" | ".Trash"
         )
+}
+
+fn exact_local_match(current: &Path, query: &str) -> Option<PathBuf> {
+    let query = query.trim();
+    if query.is_empty() || Path::new(query).is_absolute() {
+        return None;
+    }
+    let candidate = current.join(query);
+    candidate.is_dir().then_some(candidate)
 }
 
 fn rank(paths: &[PathBuf], query: &str) -> Vec<(PathBuf, i64)> {
@@ -2587,6 +2609,28 @@ mod tests {
         let deep = PathBuf::from("/tmp/projects/realistic/skills");
         let result = rank(&[deep, shallow.clone()], "skills");
         assert_eq!(result[0].0, shallow);
+    }
+
+    #[test]
+    fn exact_local_match_finds_ignored_generated_folder() {
+        let current = env::temp_dir().join(format!("wtfis-local-match-{}", std::process::id()));
+        let target = current.join("target");
+        fs::create_dir_all(&target).expect("create local target folder");
+
+        assert_eq!(exact_local_match(&current, "target"), Some(target));
+
+        let _ = fs::remove_dir_all(current);
+    }
+
+    #[test]
+    fn exact_local_match_does_not_accept_partial_names() {
+        let current =
+            env::temp_dir().join(format!("wtfis-local-match-partial-{}", std::process::id()));
+        fs::create_dir_all(current.join("target-release")).expect("create partial folder");
+
+        assert_eq!(exact_local_match(&current, "target"), None);
+
+        let _ = fs::remove_dir_all(current);
     }
 
     #[test]

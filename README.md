@@ -21,6 +21,8 @@
 
 ## See it work
 
+<p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
+
 ### Rich TUI
 
 <img src="public/TUI%20showcase.png" alt="WTFIS terminal interface listing matched directories" width="720" />
@@ -44,8 +46,6 @@ Use `--up`, `--prev`, and `--recent` when you are tired of retracing your path.
 <img src="public/Deep%20Settings.png" alt="WTFIS settings for configuring directory discovery" width="720" />
 
 Tell WTFIS where to look, how far to look, and what to run after it finds something.
-
-<p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
 
 ## Install
 
