@@ -75,7 +75,15 @@ source ~/.bashrc
 
 **Manual:** download `wtfis-macos-arm64.tar.gz` from [Releases](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest).
 
+---
+
 ### <img src="./public/platform-linux.svg" alt="Linux" width="18" height="18" /> Linux
+
+**Arch Linux / AUR**
+
+```bash
+yay -S wtfis-cli
+```
 
 **Homebrew**
 
@@ -93,15 +101,9 @@ echo 'source "$(brew --prefix)/share/wtfis/wtfis.zsh"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
-**Arch Linux / AUR**
-
-Package name: `wtfis-cli` (AUR publication pending).
-
-```bash
-yay -S wtfis-cli
-```
-
 **Manual:** download `wtfis-linux-x86_64.tar.gz` from [Releases](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest).
+
+---
 
 ### <img src="./public/platform-windows.svg" alt="Windows" width="18" height="18" /> Windows
 
