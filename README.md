@@ -23,6 +23,7 @@
 
 <p align="center"><a href="#install">Don't Care - Download this Fucker Now</a></p>
 
+g
 ### Rich TUI
 
 <img src="public/TUI%20showcase.png" alt="WTFIS terminal interface listing matched directories" width="720" />
