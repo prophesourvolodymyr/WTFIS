@@ -1,0 +1,89 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Package - ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-x86_64
+            archive: wtfis-linux-x86_64.tar.gz
+            suffix: ""
+          - os: macos-latest
+            platform: macos-arm64
+            archive: wtfis-macos-arm64.tar.gz
+            suffix: ""
+          - os: windows-latest
+            platform: windows-x86_64
+            archive: wtfis-windows-x86_64.zip
+            suffix: ".exe"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build release binary
+        run: cargo build --release --locked
+
+      - name: Assemble Unix archive
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          root="wtfis-${{ matrix.platform }}"
+          mkdir -p "dist/$root/shell"
+          cp "target/release/wtfis${{ matrix.suffix }}" "dist/$root/"
+          cp "target/release/cdd${{ matrix.suffix }}" "dist/$root/"
+          cp shell/wtfis.zsh shell/wtfis.bash shell/wtfis.ps1 "dist/$root/shell/"
+          cp README.md LICENSE "dist/$root/"
+          tar -C dist -czf "${{ matrix.archive }}" "$root"
+
+      - name: Assemble Windows archive
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $root = "wtfis-${{ matrix.platform }}"
+          $rootPath = Join-Path $PWD "dist/$root"
+          New-Item -ItemType Directory -Force -Path (Join-Path $rootPath "shell") | Out-Null
+          Copy-Item "target/release/wtfis${{ matrix.suffix }}" $rootPath
+          Copy-Item "target/release/cdd${{ matrix.suffix }}" $rootPath
+          Copy-Item shell/wtfis.zsh, shell/wtfis.bash, shell/wtfis.ps1 (Join-Path $rootPath "shell")
+          Copy-Item README.md, LICENSE $rootPath
+          Compress-Archive -Path $rootPath -DestinationPath "dist/${{ matrix.archive }}"
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}
+          path: dist/${{ matrix.archive }}
+          if-no-files-found: error
+
+  publish:
+    name: Publish GitHub Release
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download archives
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: dist/*

@@ -402,7 +402,7 @@ fn print_shell_setup_hint() {
 #[cfg(windows)]
 fn print_shell_setup_hint() {
     eprintln!(
-        "wtfis: automatic cd is off. Run in PowerShell:\n  . \"$(Split-Path (Get-Command wtfis.exe).Source)\\wtfis.ps1\""
+        "wtfis: automatic cd is off. Run in PowerShell:\n  . (Join-Path (Split-Path (Get-Command wtfis.exe).Source) 'shell\\wtfis.ps1')"
     );
 }
 
