@@ -55,7 +55,11 @@ Tell WTFIS where to look, how far to look, and what to run after it finds someth
 
 ## Install
 
-### Homebrew on macOS and Linux
+Choose the installation method for your platform. Every method installs the same WTFIS CLI and requires shell integration for automatic directory changes.
+
+### 🍎 macOS
+
+#### Homebrew (recommended)
 
 Homebrew installs the binary and shell wrappers. Source the wrapper once so WTFIS can change your current shell directory.
 
@@ -75,7 +79,64 @@ echo 'source "$(brew --prefix)/share/wtfis/wtfis.bash"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-### Scoop on Windows
+#### GitHub Release (manual)
+
+Download `wtfis-macos-arm64.tar.gz` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest), then install the binary and wrapper:
+
+```bash
+tar -xzf wtfis-macos-arm64.tar.gz
+mkdir -p ~/.local/bin ~/.local/share/wtfis
+install -m 755 wtfis-macos-arm64/wtfis wtfis-macos-arm64/cdd ~/.local/bin/
+cp -R wtfis-macos-arm64/shell ~/.local/share/wtfis
+echo 'source "$HOME/.local/share/wtfis/wtfis.zsh"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+### 🐧 Linux
+
+#### Homebrew on Linux
+
+If Homebrew is already installed, use the same tap as macOS:
+
+```bash
+brew tap prophesourvolodymyr/wtfis
+brew install wtfis
+echo 'source "$(brew --prefix)/share/wtfis/wtfis.bash"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+For Zsh, source `$(brew --prefix)/share/wtfis/wtfis.zsh` from `~/.zshrc` instead.
+
+#### Arch Linux (AUR)
+
+The Arch package is named `wtfis-cli` because `wtfis` is already used by an unrelated package. The PKGBUILD is ready in `packaging/aur/`; AUR publication is pending maintainer SSH authentication.
+
+Once published, install it with:
+
+```bash
+yay -S wtfis-cli
+```
+
+#### GitHub Release (manual)
+
+Download `wtfis-linux-x86_64.tar.gz` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest):
+
+```bash
+tar -xzf wtfis-linux-x86_64.tar.gz
+mkdir -p ~/.local/bin ~/.local/share/wtfis
+install -m 755 wtfis-linux-x86_64/wtfis wtfis-linux-x86_64/cdd ~/.local/bin/
+cp -R wtfis-linux-x86_64/shell ~/.local/share/wtfis
+
+# Bash
+echo 'source "$HOME/.local/share/wtfis/wtfis.bash"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+For Zsh, source `~/.local/share/wtfis/wtfis.zsh` from `~/.zshrc` instead.
+
+### 🪟 Windows
+
+#### Scoop (recommended)
 
 Scoop uses the public WTFIS bucket and installs the Windows release archive without administrator access.
 
@@ -93,42 +154,9 @@ To load the PowerShell wrapper in future sessions:
 Add-Content $PROFILE '. "$env:USERPROFILE\scoop\apps\wtfis\current\shell\wtfis.ps1"'
 ```
 
-### Arch Linux (AUR)
+#### GitHub Release (manual)
 
-The Arch package is named `wtfis-cli` because `wtfis` is already used by an unrelated package. The PKGBUILD is ready in `packaging/aur/`; AUR publication is pending maintainer SSH authentication.
-
-Once published, install it with:
-
-```bash
-yay -S wtfis-cli
-```
-
-### GitHub Releases
-
-Direct archives are available from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest):
-
-- `wtfis-macos-arm64.tar.gz`
-- `wtfis-linux-x86_64.tar.gz`
-- `wtfis-windows-x86_64.zip`
-
-Extract an archive, add its binary directory to `PATH`, and source the matching shell wrapper from its `shell/` directory.
-
-For a manual Linux install:
-
-```bash
-tar -xzf wtfis-linux-x86_64.tar.gz
-mkdir -p ~/.local/bin ~/.local/share/wtfis
-install -m 755 wtfis-linux-x86_64/wtfis wtfis-linux-x86_64/cdd ~/.local/bin/
-cp -R wtfis-linux-x86_64/shell ~/.local/share/wtfis
-
-# Bash
-echo 'source "$HOME/.local/share/wtfis/wtfis.bash"' >> ~/.bashrc
-source ~/.bashrc
-```
-
-For Zsh, source `~/.local/share/wtfis/wtfis.zsh` from `~/.zshrc` instead.
-
-For a manual Windows install:
+Download `wtfis-windows-x86_64.zip` from the [latest release](https://github.com/prophesourvolodymyr/WTFIS-CLI/releases/latest), then run:
 
 ```powershell
 Expand-Archive .\wtfis-windows-x86_64.zip -DestinationPath $env:LOCALAPPDATA\WTFIS -Force
