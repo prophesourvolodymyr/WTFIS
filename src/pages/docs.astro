@@ -88,10 +88,19 @@
       }
 
       .docs-brand {
-        border-color: var(--acid);
-        background: var(--acid);
-        color: var(--deep-blue);
-        font-weight: 600;
+        min-height: 0;
+        border: 0;
+        border-radius: 0;
+        padding: 0;
+        background: transparent;
+      }
+
+      .docs-brand img {
+        display: block;
+        width: 3rem;
+        height: 3rem;
+        filter: brightness(0) invert(1);
+        object-fit: contain;
       }
 
       .docs-nav-links {
@@ -154,6 +163,12 @@
         color: var(--deep-blue);
         outline: none;
       }
+
+      .sidebar-links a.is-active {
+        border-left-color: var(--acid);
+        background: rgba(212, 255, 69, 0.2);
+        color: var(--deep-blue);
+        font-weight: 600;
 
       .docs-main {
         min-width: 0;
@@ -441,6 +456,10 @@
         .sidebar-links a:focus-visible {
           border-color: var(--acid);
         }
+
+        .sidebar-links a.is-active {
+          border-color: var(--acid);
+        }
       }
 
       @media (max-width: 560px) {
@@ -482,7 +501,9 @@
     <div class="docs-grid" aria-hidden="true"></div>
 
     <header class="docs-nav">
-      <a class="docs-brand" href="/">WTFIS / DOCS</a>
+      <a class="docs-brand" href="/" aria-label="WTFIS home">
+        <img src="/WTFIS%20logo%20main.png" alt="" width="1024" height="1024" />
+      </a>
       <nav class="docs-nav-links" aria-label="Documentation navigation">
         <a href="/#pain-point">home</a>
         <a href="https://github.com/prophesourvolodymyr/WTFIS-CLI" target="_blank" rel="noreferrer">github</a>
@@ -511,7 +532,7 @@
           <p class="docs-kicker">Local-first / inline project finder</p>
           <h1 class="docs-title">WTFIS<br />HELP.</h1>
           <p class="docs-lede">
-            Where the fuck is your project? WTFIS searches your local folders with fuzzy matching, opens the right project, and lets your shell enter it without the directory archaeology.
+            Where the fuck is your project? WTFIS looks through your local folders, handles fuzzy matches, and drops your shell into the folder you meant.
           </p>
 
           <div class="terminal-preview" aria-label="WTFIS help terminal preview">
@@ -537,29 +558,29 @@ HELP CONTROLS
 
         <section class="docs-section" id="install">
           <h2 class="section-heading"><span class="section-number">01</span>Install</h2>
-          <p class="section-copy">Install the command through Homebrew, then source the wrapper once so the parent shell can change directories after a selection.</p>
+          <p class="section-copy">Install with Homebrew, then source the wrapper once. The wrapper is what lets WTFIS change your current shell after you pick a folder.</p>
           <div class="install-block">
             <div class="code-block"><button class="copy-code" type="button" data-copy="brew tap prophesourvolodymyr/wtfis\nbrew install wtfis">copy</button>brew tap prophesourvolodymyr/wtfis
 brew install wtfis</div>
             <div class="code-block"><button class="copy-code" type="button" data-copy='cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc'>copy</button>cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc
 source ~/.zshrc</div>
           </div>
-          <p class="section-copy">For Bash, source <code>wtfis.bash</code> instead. Without shell integration, WTFIS can print paths but cannot change the parent shell directory.</p>
+          <p class="section-copy">For Bash, source <code>wtfis.bash</code> instead. Without shell integration, WTFIS prints paths but cannot move the parent shell.</p>
         </section>
 
         <section class="docs-section" id="usage">
           <h2 class="section-heading"><span class="section-number">02</span>Usage</h2>
-          <p class="section-copy">Run WTFIS with no query to open recent projects, or pass a project name, path, typo, or command preset directly.</p>
+          <p class="section-copy">Run WTFIS on its own for recent projects. Pass a project name, path, typo, or command preset when you already know what you want.</p>
           <div class="code-block"><button class="copy-code" type="button" data-copy="wtfis\nwtfis Mascotify\ncdd Mascotify\nwtfis Mascotify /opencode">copy</button>wtfis                         # open inline search
 wtfis Mascotify              # search immediately
 cdd Mascotify                # short alias
 wtfis Mascotify /opencode    # search, enter, and run a command</div>
-          <p class="section-copy">Launching <code>wtfis</code> with no query does not scan the filesystem. It opens immediately with up to five recently opened folders; scanning begins when you type the first search character.</p>
+          <p class="section-copy">Running <code>wtfis</code> with no query does not scan anything. It opens with up to five recent folders, then starts searching when you type.</p>
         </section>
 
         <section class="docs-section" id="direct-commands">
           <h2 class="section-heading"><span class="section-number">03</span>Direct commands</h2>
-          <p class="section-copy">These commands act without opening the selector when the required shell or project state is available.</p>
+          <p class="section-copy">These skip the selector when WTFIS already has enough context to act.</p>
           <table class="command-table">
             <thead>
               <tr><th>Command</th><th>Action</th></tr>
@@ -583,26 +604,26 @@ wtfis Mascotify /opencode    # search, enter, and run a command</div>
           <div class="info-grid">
             <article class="info-card">
               <h3>Fuzzy by default.</h3>
-              <p>Type a project name, path, or typo, then press Enter. Multiple words are required matches and can be typed in any order.</p>
+              <p>Type a project name, path, or typo, then press Enter. Every word must match, but the order does not matter.</p>
             </article>
             <article class="info-card">
               <h3>Safe matches.</h3>
-              <p>Unique confident matches open immediately. Ambiguous matches stay in the selector so you can choose safely.</p>
+              <p>A clear match opens immediately. If more than one folder fits, WTFIS leaves the choice with you.</p>
             </article>
             <article class="info-card">
               <h3>Local only.</h3>
-              <p>Matching is local. Paths and project data never leave this machine. Semantic search is planned, but is not available yet.</p>
+              <p>Matching stays on this machine. Paths and project data do not leave it. Semantic search is not here yet.</p>
             </article>
             <article class="info-card">
               <h3>Depth aware.</h3>
-              <p>Search depth includes every layer up to the configured maximum. Shallower matches rank first.</p>
+              <p>WTFIS checks every layer up to the depth you set. Shallow matches rank first.</p>
             </article>
           </div>
         </section>
 
         <section class="docs-section" id="slash-commands">
           <h2 class="section-heading"><span class="section-number">05</span>Slash commands</h2>
-          <p class="section-copy">Type <code>/</code> in the selector to browse configured command presets. Commands can enter a project and run immediately, or be attached to a project for later use.</p>
+          <p class="section-copy">Type <code>/</code> in the selector to browse command presets. Run one immediately, or attach it to a project for later.</p>
           <table class="command-table">
             <thead>
               <tr><th>Input</th><th>Action</th></tr>
@@ -638,15 +659,15 @@ wtfis Mascotify /opencode    # search, enter, and run a command</div>
 
         <section class="docs-section" id="configuration">
           <h2 class="section-heading"><span class="section-number">07</span>Configuration</h2>
-          <p class="section-copy">Reopen the settings screen at any time with <code>wtfis --set</code>. Configure search roots, hidden folders, exact depth, accent, marker, coffee reminders, and command presets from the inline settings UI.</p>
+          <p class="section-copy">Run <code>wtfis --set</code> whenever you need to change roots, hidden folders, depth, colours, coffee reminders, or command presets.</p>
           <div class="code-block"><button class="copy-code" type="button" data-copy='roots = ["/Users/you/GSpace"]\nexact_depth = 3'>copy</button>roots = ["/Users/you/GSpace"]
 exact_depth = 3</div>
-          <p class="section-copy"><code>exact_depth</code> is a maximum directory depth. A value of <code>3</code> searches the root's first, second, and third layers.</p>
+          <p class="section-copy"><code>exact_depth</code> caps how far WTFIS looks. A value of <code>3</code> checks the first three layers below the root.</p>
         </section>
 
         <section class="docs-section" id="shell-integration">
           <h2 class="section-heading"><span class="section-number">08</span>Shell integration</h2>
-          <p class="section-copy">The wrapper captures the selected path and changes the parent shell directory after WTFIS exits. Homebrew installs the wrapper under <code>share/wtfis</code> and prints setup commands.</p>
+          <p class="section-copy">The wrapper keeps the selected path long enough to move your current shell after WTFIS exits. Homebrew installs it under <code>share/wtfis</code> and prints the setup command.</p>
           <div class="info-grid">
             <article class="info-card">
               <h3>Zsh</h3>
@@ -659,19 +680,53 @@ source ~/.zshrc</pre>
 source ~/.bashrc</pre>
             </article>
           </div>
-          <p class="section-copy">A failed <code>cd path</code> prints <code>Try: wtfis --up</code> for global recovery.</p>
+          <p class="section-copy">If <code>cd path</code> fails, WTFIS suggests <code>wtfis --up</code>.</p>
         </section>
       </main>
     </div>
 
     <footer class="docs-footer">
       <strong>WTFIS</strong>
-      <span>Local-first. Open source. No path archaeology.</span>
+      <span>Open source. Built for forgotten paths.</span>
     </footer>
 
     <script>
       // @ts-nocheck
       (() => {
+        const contentsLinks = [...document.querySelectorAll('.sidebar-links a[href^="#"]')];
+        const contentsSections = contentsLinks
+          .map((link) => document.querySelector(link.hash))
+          .filter(Boolean);
+
+        if (contentsSections.length) {
+          let contentsFrame = 0;
+
+          const updateContentsIndicator = () => {
+            contentsFrame = 0;
+            const marker = window.innerHeight * 0.32;
+            let activeSection = contentsSections[0];
+
+            contentsSections.forEach((section) => {
+              if (section.getBoundingClientRect().top <= marker) activeSection = section;
+            });
+
+            contentsLinks.forEach((link) => {
+              const isActive = link.hash === `#${activeSection.id}`;
+              link.classList.toggle("is-active", isActive);
+              link.toggleAttribute("aria-current", isActive);
+            });
+          };
+
+          const requestContentsUpdate = () => {
+            if (contentsFrame) return;
+            contentsFrame = window.requestAnimationFrame(updateContentsIndicator);
+          };
+
+          window.addEventListener("scroll", requestContentsUpdate, { passive: true });
+          window.addEventListener("resize", requestContentsUpdate, { passive: true });
+          updateContentsIndicator();
+        }
+
         document.querySelectorAll("[data-copy]").forEach((button) => {
           button.addEventListener("click", async () => {
             const value = button.dataset.copy.replace(/\\n/g, "\n");
