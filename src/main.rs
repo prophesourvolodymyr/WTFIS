@@ -19,7 +19,7 @@ use crossterm::{
 };
 use ratatui::{
     Terminal, TerminalOptions, Viewport,
-    backend::CrosstermBackend,
+    backend::{Backend, CrosstermBackend},
     layout::{Alignment, Constraint, Direction, Layout, Position, Rect},
     style::{Color, Modifier, Style},
     text::{Line, Span},
@@ -1405,7 +1405,7 @@ fn picker(
 
 struct UiSession {
     terminal: Terminal<CrosstermBackend<io::Stdout>>,
-    height: u16,
+    initial_cursor: Position,
     mouse_capture: bool,
     raw_mode: bool,
     cleaned: bool,
@@ -1415,11 +1415,13 @@ impl UiSession {
     fn new(height: u16) -> io::Result<Self> {
         terminal::enable_raw_mode()?;
         let mut backend = CrosstermBackend::new(io::stdout());
-        if let Err(error) = execute!(backend, cursor::SavePosition) {
-            let _ = terminal::disable_raw_mode();
-            return Err(error);
-        }
-
+        let initial_cursor = match backend.get_cursor_position() {
+            Ok(position) => position,
+            Err(error) => {
+                let _ = terminal::disable_raw_mode();
+                return Err(error);
+            }
+        };
         let terminal = match Terminal::with_options(
             backend,
             TerminalOptions {
@@ -1428,14 +1430,13 @@ impl UiSession {
         ) {
             Ok(terminal) => terminal,
             Err(error) => {
-                let _ = execute!(io::stdout(), cursor::RestorePosition);
                 let _ = terminal::disable_raw_mode();
                 return Err(error);
             }
         };
         let session = Self {
             terminal,
-            height,
+            initial_cursor,
             mouse_capture: false,
             raw_mode: true,
             cleaned: false,
@@ -1465,8 +1466,7 @@ impl UiSession {
         }
         if let Err(error) = execute!(
             self.terminal.backend_mut(),
-            cursor::RestorePosition,
-            crossterm::style::Print(format!("\x1b[{}M", self.height)),
+            cursor::MoveTo(self.initial_cursor.x, self.initial_cursor.y),
             Clear(ClearType::CurrentLine),
             cursor::MoveToColumn(0),
         ) {
