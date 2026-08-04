@@ -1,8 +1,8 @@
 class Wtfis < Formula
   desc "Find projects fast from your terminal"
-  homepage "https://github.com/prophesourvolodymyr/WTFIS-CLI"
-  url "https://github.com/prophesourvolodymyr/WTFIS-CLI/archive/refs/tags/v1.0.3.tar.gz"
-  version "1.0.3"
+  homepage "https://github.com/prophesourvolodymyr/WTFIS"
+  url "https://github.com/prophesourvolodymyr/WTFIS/archive/refs/tags/v1.0.4.tar.gz"
+  version "1.0.4"
   license "WTFPL"
 
   depends_on "rust" => :build
@@ -18,11 +18,11 @@ class Wtfis < Formula
       WTFIS needs shell integration to change your parent shell directory.
 
       Zsh:
-        echo 'source "$(brew --prefix)/share/wtfis/wtfis.zsh"' >> ~/.zshrc
+        echo 'source "$(brew --prefix wtfis)/share/wtfis/wtfis.zsh"' >> ~/.zshrc
         source ~/.zshrc
 
       Bash:
-        echo 'source "$(brew --prefix)/share/wtfis/wtfis.bash"' >> ~/.bashrc
+        echo 'source "$(brew --prefix wtfis)/share/wtfis/wtfis.bash"' >> ~/.bashrc
         source ~/.bashrc
     EOS
   end

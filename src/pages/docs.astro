@@ -593,7 +593,7 @@ HELP CONTROLS
             <div class="install-block">
               <div class="code-block"><button class="copy-code" type="button" data-copy="brew tap prophesourvolodymyr/wtfis\nbrew install wtfis">copy</button>brew tap prophesourvolodymyr/wtfis
 brew install wtfis</div>
-              <div class="code-block"><button class="copy-code" type="button" data-copy='cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc\nsource ~/.zshrc'>copy</button>cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc
+              <div class="code-block"><button class="copy-code" type="button" data-copy='cat "$(brew --prefix wtfis)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc\nsource ~/.zshrc'>copy</button>cat "$(brew --prefix wtfis)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc
 source ~/.zshrc</div>
             </div>
             <p class="section-copy">For Bash, source <code>wtfis.bash</code> from the same Homebrew directory in <code>~/.bashrc</code>.</p>
@@ -729,12 +729,12 @@ exact_depth = 3</div>
           <div class="info-grid">
             <article class="info-card">
               <h3>Zsh</h3>
-              <pre>cat "$(brew --prefix)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc
+              <pre>cat "$(brew --prefix wtfis)/share/wtfis/wtfis.zsh" &gt;&gt; ~/.zshrc
 source ~/.zshrc</pre>
             </article>
             <article class="info-card">
               <h3>Bash</h3>
-              <pre>cat "$(brew --prefix)/share/wtfis/wtfis.bash" &gt;&gt; ~/.bashrc
+              <pre>cat "$(brew --prefix wtfis)/share/wtfis/wtfis.bash" &gt;&gt; ~/.bashrc
 source ~/.bashrc</pre>
             </article>
           </div>

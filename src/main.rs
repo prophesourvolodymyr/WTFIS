@@ -410,7 +410,7 @@ fn print_shell_setup_hint() {
         "wtfis.zsh"
     };
     eprintln!(
-        "wtfis: automatic cd is off. Run:\n  source \"$(brew --prefix)/share/wtfis/{wrapper}\""
+        "wtfis: automatic cd is off. Run:\n  source \"$(brew --prefix wtfis)/share/wtfis/{wrapper}\""
     );
 }
 

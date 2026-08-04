@@ -64,14 +64,14 @@ Tell WTFIS where to look, how far to look, and what to run after it finds someth
 ```bash
 brew tap prophesourvolodymyr/wtfis
 brew install wtfis
-cat "$(brew --prefix)/share/wtfis/wtfis.zsh" >> ~/.zshrc
+cat "$(brew --prefix wtfis)/share/wtfis/wtfis.zsh" >> ~/.zshrc
 source ~/.zshrc
 ```
 
 For Bash:
 
 ```bash
-echo 'source "$(brew --prefix)/share/wtfis/wtfis.bash"' >> ~/.bashrc
+echo 'source "$(brew --prefix wtfis)/share/wtfis/wtfis.bash"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -92,14 +92,14 @@ yay -S wtfis-cli
 ```bash
 brew tap prophesourvolodymyr/wtfis
 brew install wtfis
-echo 'source "$(brew --prefix)/share/wtfis/wtfis.bash"' >> ~/.bashrc
+echo 'source "$(brew --prefix wtfis)/share/wtfis/wtfis.bash"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
 For Zsh:
 
 ```bash
-echo 'source "$(brew --prefix)/share/wtfis/wtfis.zsh"' >> ~/.zshrc
+echo 'source "$(brew --prefix wtfis)/share/wtfis/wtfis.zsh"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
